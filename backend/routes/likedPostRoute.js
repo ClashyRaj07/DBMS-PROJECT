@@ -17,9 +17,16 @@ router.post('/like', (req, res) => {
 router.get('/post/:id', (req, res) => {
   const postId = req.params.id
 
-  const q = `SELECT * FROM likes WHERE liked_postId=${postId}`
+  q = `SELECT liked_by FROM likes WHERE liked_postId=${postId}`
+  db.query(q, (err, data) => {
+    if (err) return res.status(404).json({success: false,err})
 
-  makeQuery(q, res)
+    let likes = []
+    data.map(el => likes.push(el.liked_by))
+    likes = [...new Set(likes)]
+    data = likes
+    res.status(200).json({success: true,likes: likes})
+  })
 })
 
 // Dislike a post

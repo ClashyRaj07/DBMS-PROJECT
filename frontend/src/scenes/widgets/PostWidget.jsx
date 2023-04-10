@@ -8,7 +8,7 @@ import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import Friend from "../../components/Friend";
 import WidgetWrapper from "../../components/WidgetWrapper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
 import { likePost } from "../../actions/postActions";
@@ -26,7 +26,7 @@ const PostWidget = ({
 }) => {
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
-  const loggedInUserId = useSelector((state) => state.profile.user.userId);
+  const loggedInUserId = useSelector((state) => state.profile.user?.userId);
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
 
@@ -38,6 +38,9 @@ const PostWidget = ({
     await dispatch(likePost(loggedInUserId, postId));
   };
 
+  useEffect(() => {
+
+  }, [loggedInUserId])
   return (
     <WidgetWrapper m="2rem 0">
       <Friend
@@ -49,15 +52,18 @@ const PostWidget = ({
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
       </Typography>
-      {picturePath && (
-        <img
-          width="100%"
-          height="auto"
-          alt="post"
-          style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          src={picturePath}
-        />
-      )}
+      <div>
+        {picturePath && picturePath.length > 20 &&
+          <img
+            width="100%"
+            height="auto"
+            alt="post"
+            style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
+            src={picturePath}
+          />
+        }
+      </div>
+
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">

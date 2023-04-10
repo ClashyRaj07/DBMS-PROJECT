@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 export const getAllPosts=()=>async (dispatch)=>{
     try {
          dispatch({type:"GET_ALL_POSTS_REQUEST"})
@@ -22,23 +21,21 @@ export const getAllPosts=()=>async (dispatch)=>{
 }
 
 export const newPost=(postData)=>async (dispatch)=>{
-    try {
-         dispatch({type:"NEW_POSTS_REQUEST"})
+     try {
+        dispatch({type:'NEW_POSTS_REQUEST'})
 
-        const options={
-            headers: { "Content-Type": "application/json" }
-        }
-        const {data}= await axios.post(`http://localhost:5000/posts/create`,postData,options);
+        const config = { headers: {
+    'Content-Type': 'application/json',
     
-        dispatch({type:"NEW_POSTS_SUCCESS",payload:data.success})
+  }}
+        const {data}=await axios.post(`http://localhost:5000/posts/create`,postData,{config})
 
-        
+        dispatch({type:'NEW_POSTS_SUCCESS',payload:data.success})
         
     } catch (error) {
-
-        console.log(error.response);
-        dispatch({type:"NEW_POSTS_FAIL",payload:error.response.data.message})
-    }      
+        
+        dispatch({type:'NEW_POSTS_FAIL',payload:error?.response?.data?.message})   
+    }    
 }
 
 export const likePost=(liked_by,liked_postId)=>async (dispatch)=>{

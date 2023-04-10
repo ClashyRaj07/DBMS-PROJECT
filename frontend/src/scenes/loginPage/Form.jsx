@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
   TextField,
   useMediaQuery,
   Typography,
-  useTheme
+  useTheme,
+  Avatar
 } from '@mui/material';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
@@ -24,7 +25,7 @@ const registerSchema = yup.object().shape({
   password: yup.string().required("required"),
   location: yup.string().required("required"),
   occupation: yup.string().required("required"),
-  picture: yup.string().required("required"),
+  picture: yup.string(),
 });
 
 const loginSchema = yup.object().shape({
@@ -48,6 +49,8 @@ const initialValuesLogin = {
 };
 
 const Form = () => {
+  const imageRef = useRef();
+  const [image, setImage] = useState(null);
   const [pageType, setPageType] = useState("login");
   const { palette } = useTheme();
   const dispatch = useDispatch();
@@ -57,6 +60,10 @@ const Form = () => {
   const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
+    if (image) {
+      values.picturePath = image;
+    }
+    console.log("Register data ", values);
     // this allows us to send form info with image
     const formData = new FormData();
     for (let value in values) {
@@ -80,10 +87,10 @@ const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
-    const body=JSON.stringify(values);
-      dispatch(loginUser(body));
-      navigate("/home");
-    
+    const body = JSON.stringify(values);
+    dispatch(loginUser(body));
+    navigate("/home");
+
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
@@ -91,11 +98,24 @@ const Form = () => {
     if (isRegister) await register(values, onSubmitProps);
   };
 
+  //Handle Image Change
+  const handleImageChange = (e) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+
+        setImage(reader.result);
+      }
+    }
+    if (e.target?.files[0]) reader.readAsDataURL(e.target.files[0])
+  }
+
+
   // const {user}=useSelector(state=>state.user)
 
-  useEffect(()=>{
+  useEffect(() => {
 
-  },[])
+  }, [image])
 
   return (
     <Formik
@@ -114,6 +134,17 @@ const Form = () => {
         resetForm,
       }) => (
         <form onSubmit={handleSubmit}>
+          {isRegister && <Box>
+            <div style={{ display: 'flex', justifyContent: 'center' }} onClick={e => imageRef.current.click()}>
+              <Avatar
+                alt="user"
+                src={image}
+
+                sx={{ width: '10rem', height: '10rem', marginBottom: '2rem' }}
+              />
+              <input type="file" name="image" id="image" hidden ref={imageRef} onChange={handleImageChange} />
+            </div>
+          </Box>}
           <Box
             display="grid"
             gap="30px"
@@ -124,6 +155,7 @@ const Form = () => {
           >
             {isRegister && (
               <>
+
                 <TextField
                   label="First Name"
                   onBlur={handleBlur}
@@ -168,39 +200,7 @@ const Form = () => {
                   helperText={touched.occupation && errors.occupation}
                   sx={{ gridColumn: "span 4" }}
                 />
-                <Box
-                  gridColumn="span 4"
-                  border={`1px solid ${palette.neutral.medium}`}
-                  borderRadius="5px"
-                  p="1rem"
-                >
-                  <Dropzone
-                    acceptedFiles=".jpg,.jpeg,.png"
-                    multiple={false}
-                    onDrop={(acceptedFiles) =>
-                      setFieldValue("picture", acceptedFiles[0])
-                    }
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <Box
-                        {...getRootProps()}
-                        border={`2px dashed ${palette.primary.main}`}
-                        p="1rem"
-                        sx={{ "&:hover": { cursor: "pointer" } }}
-                      >
-                        <input {...getInputProps()} />
-                        {!values.picture ? (
-                          <p>Add Picture Here</p>
-                        ) : (
-                          <FlexBetween>
-                            <Typography>{values.picture.name}</Typography>
-                            <EditOutlinedIcon />
-                          </FlexBetween>
-                        )}
-                      </Box>
-                    )}
-                  </Dropzone>
-                </Box>
+
               </>
             )}
 

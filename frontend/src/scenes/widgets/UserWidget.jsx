@@ -11,6 +11,7 @@ import WidgetWrapper from "../../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import UserUpdate from '../../components/UserUpdate'
 
 const UserWidget = ({ userId, picturePath }) => {
   const dispatch = useDispatch();
@@ -77,7 +78,8 @@ const UserWidget = ({ userId, picturePath }) => {
             <Typography color={medium}>{friends.length} friends</Typography>
           </Box>
         </FlexBetween>
-        <ManageAccountsOutlined />
+
+        <UserUpdate />
       </FlexBetween>
 
       <Divider />

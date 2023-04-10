@@ -6,26 +6,32 @@ const cloudinary=require('cloudinary')
 
 // Create new Post
 router.post('/create', async (req, res) => {
+  const {description, image=null, userId} = req.body
 
-  const {description, post_img=null, userId} = req.body
-
-  if(post_img)
+  if(image)
   {
-    const data=await cloudinary.v2.uploader.upload(post_img,{folder:'TwikTik'})
-    console.log("VClodianey data",data);
-  }
+    const data=await cloudinary.v2.uploader.upload(image,{folder:'TwikTik'})
+    req.body.public_url=data.public_id
+    req.body.post_img=data.secure_url
 
-  const q = `INSERT INTO blogpost (description ,post_img,userId) VALUES ('${description}','${post_img}',${userId})`
+  }
+  
+  const q = `INSERT INTO blogpost (description ,post_img,public_url,userId) VALUES ('${description}','${req.body.post_img}','${req.body.public_url}',${userId})`
 
   makeQuery(q, res)
 })
 
 // Get all posts
-router.get('/all', (req, res) => {
+router.get('/all',  async (req, res) => {
 
-  const q = 'SELECT * FROM blogpost NATURAL JOIN user'
+let q = `SELECT * FROM blogpost NATURAL JOIN user order by createdAt desc limit 5;`
 
-  makeQuery(q, res)
+  
+  db.query(q,   async (err, data) => {
+    if (err) return res.status(404).json({success: false,err})
+    return res.status(200).json({success:true,data:data})  
+  })
+  
 })
 
 // Get Post by postId

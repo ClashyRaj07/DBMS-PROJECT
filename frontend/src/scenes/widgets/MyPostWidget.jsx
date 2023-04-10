@@ -21,12 +21,13 @@ import FlexBetween from "../../components/FlexBetween";
 import Dropzone from "react-dropzone";
 import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWrapper";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import { getAllPosts, newPost } from "../../actions/postActions";
 
 const MyPostWidget = ({ picturePath }) => {
+
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
@@ -37,7 +38,7 @@ const MyPostWidget = ({ picturePath }) => {
   const { isCreated, error } = useSelector(state => state.post)
   const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MjE5MDEwNGRkZTVlNjY2NWYzZWQ1MiIsImlhdCI6MTY3OTkyMjQwOX0.jT5j7tlfby13a-2P5zSjGX9lKUJhppATMR2AmCdl0gg"
   // const friends = useSelector((state) => state.user.friends);
-
+  const imageRef = useRef();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
@@ -53,18 +54,17 @@ const MyPostWidget = ({ picturePath }) => {
     reader.readAsDataURL(e.target.files[0])
   }
   const handlePost = async () => {
-    const formData = {
+
+
+    const myForm = {
       "userId": userId,
       "description": post
     }
-    if (image) {
-      formData.image = image
+    if (image) myForm.image = image
 
-    }
-
-    console.log("Form Data Is REady ", formData);
-    return false;
-    dispatch(newPost(formData));
+    console.log("Description-->", myForm, post);
+    dispatch(newPost(myForm));
+    imageRef.current.value = null;
     setImage(null);
     setPost("");
   };
@@ -99,48 +99,19 @@ const MyPostWidget = ({ picturePath }) => {
           }}
         />
       </FlexBetween>
-      {isImage && (
+      <div>
+        <input type="file" hidden ref={imageRef} onChange={handleImageChange} />
+      </div>
+      {isImage && image && (
+
         <Box
-          border={`1px solid ${medium}`}
           borderRadius="5px"
           mt="1rem"
           p="1rem"
         >
-          <Dropzone
-            acceptedFiles=".jpg,.jpeg,.png"
-            multiple={false}
-            onChange={handleImageChange}
-          >
-            {({ getRootProps, getInputProps }) => (
-              <FlexBetween>
-                <Box
-                  {...getRootProps()}
-                  border={`2px dashed ${palette.primary.main}`}
-                  p="1rem"
-                  width="100%"
-                  sx={{ "&:hover": { cursor: "pointer" } }}
-                >
-                  <input {...getInputProps()} />
-                  {!image ? (
-                    <p>Add Image Here</p>
-                  ) : (
-                    <FlexBetween>
-                      <Typography>{image.name}</Typography>
-                      <EditOutlined />
-                    </FlexBetween>
-                  )}
-                </Box>
-                {image && (
-                  <IconButton
-                    onClick={() => setImage(null)}
-                    sx={{ width: "15%" }}
-                  >
-                    <DeleteOutlined />
-                  </IconButton>
-                )}
-              </FlexBetween>
-            )}
-          </Dropzone>
+
+          <img style={{ width: "100%" }} src={image} alt="" />
+
         </Box>
       )}
 
@@ -150,6 +121,7 @@ const MyPostWidget = ({ picturePath }) => {
         <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
           <ImageOutlined sx={{ color: mediumMain }} />
           <Typography
+            onClick={() => imageRef.current.click()}
             color={mediumMain}
             sx={{ "&:hover": { cursor: "pointer", color: medium } }}
           >
@@ -192,7 +164,7 @@ const MyPostWidget = ({ picturePath }) => {
           POST
         </Button>
       </FlexBetween>
-    </WidgetWrapper>
+    </WidgetWrapper >
   );
 };
 

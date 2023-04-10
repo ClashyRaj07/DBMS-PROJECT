@@ -13,9 +13,10 @@ router.get('/:id', (req, res) => {
 // Update User Details
 router.put('/:id', (req, res) => {
   const userId = req.params.id
-  const {username} = req.body
-  if (username) {
-    const q = `UPDATE user SET username='${username}' WHERE userId='${userId}'`
+  const {firstName, lastName, location, occupation, picturePath} = req.body
+
+  if (userId) {
+    const q = `UPDATE user SET firstName='${firstName}',lastName='${lastName}',location='${location}',occupation='${occupation}',picturePath='${picturePath}' WHERE userId='${userId}'`
     makeQuery(q, res)
   }else {
     return res.status(200).json({

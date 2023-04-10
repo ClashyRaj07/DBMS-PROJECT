@@ -24,32 +24,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
+import { logout } from "../../actions/usersAction";
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const user = useSelector((state) => state.user);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const { user: newuser } = useSelector(state => state.profile)
-
-  console.log("newUser->", newuser);
-  const user = {
-    createdAt: "2023-03-27T12:46:08.218Z",
-    email: "ronaldo09852@gmail.com",
-    firstName: "bbbbbbbbadf",
-    friends: [],
-    impressions: 6082,
-    lastName: "dddddddddddddd",
-    location: "dddddddddddddddddddddddd",
-    occupation: "ddddddddddddddddddddddddddd",
-    password: "$2b$10$Wf4iuXZgKTr60W/7Ce428.GBiSXgu.XKxwlwB2GNhFItGsLP3SH3W",
-    picturePath: "Screenshot_20221121_055736.png",
-    updatedAt: "2023-03-27T12:46:08.218Z",
-    viewedProfile: 412,
-    __v: 0,
-    _id: "642190104dde5e6665f3ed52",
-  };
+  const { user } = useSelector(state => state.profile)
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -126,7 +108,7 @@ const Navbar = () => {
               <MenuItem value={fullName}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+              <MenuItem onClick={() => dispatch(logout())}>Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>

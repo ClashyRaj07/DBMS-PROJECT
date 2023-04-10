@@ -1,11 +1,5 @@
 const express = require('express')
 
-const app = express()
-const PORT = 5000
-app.use(express.json())
-
-const cors = require('cors')
-
 const authRoute = require('./routes/authRoute.js')
 const userRoute = require('./routes/userRoute.js')
 const blogPostRoute = require('./routes/blogPostRoute.js')
@@ -14,8 +8,13 @@ const likedPostRoute = require('./routes/likedPostRoute.js')
 const bodyParser = require('body-parser')
 const cloudinary = require('cloudinary')
 
+const app = express()
+const PORT = 5000
+app.use(express.json({limit: '50mb'}))
+app.use(express.urlencoded({limit: '50mb'}))
+const cors = require('cors')
+
 app.use(cors())
-app.use(bodyParser({extended: true}))
 
 cloudinary.config({
   cloud_name: 'dbhf7xh4q',
