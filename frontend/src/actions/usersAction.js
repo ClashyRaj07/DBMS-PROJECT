@@ -1,15 +1,42 @@
 import axios from 'axios'
+export const registerUser=(userData)=>async (dispatch)=>{
+    console.log("register is here ");
+    try {
+         dispatch({type:"NEW_USER_REQUEST"})
 
+        const options={
+            
+            withCredentials:true,
+            headers:{ "Content-Type": "application/json"}
+            
+        }
+        const {data}= await axios.post("http://localhost:5000/auth/register",userData,options);
+    
+        dispatch({type:"NEW_USER_SUCCESS",payload:data.success})
+
+        
+        
+    } catch (error) {
+
+        console.log(error.response);
+        dispatch({type:"NEW_USER_FAIL",payload:error.response.data.message})
+    }
+    
+       
+}
 export const loginUser=(userData)=>async (dispatch)=>{
     try {
          dispatch({type:"GET_USER_REQUEST"})
 
         const options={
-            headers: { "Content-Type": "application/json" }
+            
+            withCredentials:true,
+            headers:{ "Content-Type": "application/json"}
+            
         }
         const {data}= await axios.post("http://localhost:5000/auth/login",userData,options);
     
-        dispatch({type:"GET_USER_SUCCESS",payload:data.data[0]})
+        dispatch({type:"GET_USER_SUCCESS",payload:data.user})
 
         
         
@@ -33,7 +60,7 @@ export const getUser=(userId)=>async (dispatch)=>{
         const options={
             headers: { "Content-Type": "application/json" }
         }
-        const {data}= await axios.get(`http://localhost:5000/auth/${userId}`);
+        const {data}= await axios.get(`http://localhost:5000/users/${userId}`);
     
         dispatch({type:"GET_USER_SUCCESS",payload:data.data[0]})
 

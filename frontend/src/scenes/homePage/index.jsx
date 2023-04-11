@@ -13,11 +13,11 @@ import Loader from '../../components/Loader'
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery('(min-width:1000px)')
   const { userId: _id, picturePath = 'https://imgs.search.brave.com/tfPSA7_h4u0xIonW23pcAmplHavUbB2DZeVlrNMgKSA/rs:fit:844:225:1/g:ce/aHR0cHM6Ly90c2U0/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC50/UVhnOGpEY0NaVHpS/WVNwUnJtWHR3SGFF/SyZwaWQ9QXBp' } = useSelector((state) => state.profile)
-  const { user } = useSelector(state => state.profile)
+  const { user, isUpdated } = useSelector(state => state.profile)
   useEffect(
     () => {
 
-    }, [user]
+    }, [user, isUpdated]
   )
   return (
     <>{!user ? <Loader /> :

@@ -1,20 +1,33 @@
-const express = require('express')
+import express from 'express'
+import bodyParser from 'body-parser'
+import cloudinary from 'cloudinary'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
-const authRoute = require('./routes/authRoute.js')
-const userRoute = require('./routes/userRoute.js')
-const blogPostRoute = require('./routes/blogPostRoute.js')
-const commentsRoute = require('./routes/commentsRoute.js')
-const likedPostRoute = require('./routes/likedPostRoute.js')
-const bodyParser = require('body-parser')
-const cloudinary = require('cloudinary')
-
+// IMPLEMENTING MIDDLEWARES
 const app = express()
 const PORT = 5000
 app.use(express.json({limit: '50mb'}))
 app.use(express.urlencoded({limit: '50mb'}))
-const cors = require('cors')
+app.use(bodyParser({extended: true}))
+app.use(cookieParser())
 
-app.use(cors())
+const corsOptions = {
+  origin: ['http://127.0.0.1:5000', 'http://127.0.0.1:3000', 'http://localhost:5000', 'http://localhost:3000'],
+  optionsSuccessStatus: 200,
+  credentials: true
+}
+app.use(cors(corsOptions))
+
+import authRoute from './routes/authRoute.js'
+
+import userRoute from './routes/userRoute.js'
+
+import postRoute from './routes/postRoute.js'
+
+import likedPostRoute from './routes/likedPostRoute.js'
+
+import commentsRoute from './routes/commentsRoute.js'
 
 cloudinary.config({
   cloud_name: 'dbhf7xh4q',
@@ -26,7 +39,7 @@ app.use('/auth', authRoute)
 
 app.use('/users', userRoute)
 
-app.use('/posts', blogPostRoute)
+app.use('/posts', postRoute)
 
 app.use('/comments', commentsRoute)
 

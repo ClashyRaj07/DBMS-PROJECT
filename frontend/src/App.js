@@ -9,6 +9,9 @@ import { createTheme } from '@mui/material/styles'
 import { themeSettings } from './theme'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+
+const queryClient = new QueryClient()
 
 function App () {
   const mode = useSelector((state) => state.mode)
@@ -18,17 +21,19 @@ function App () {
   const isAuth = true
   return (
     <div className='app'>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Routes>
-            <Route path='/' element={<LoginPage />} />
-            <Route path='/home' element={isAuth ? <HomePage /> : <Navigate to='/' />} />
-            <Route path='/profile/:userId' element={isAuth ? <ProfilePage /> : <Navigate to='/' />} />
-          </Routes>
-          <ToastContainer />
-        </ThemeProvider>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Routes>
+              <Route path='/' element={<LoginPage />} />
+              <Route path='/home' element={isAuth ? <HomePage /> : <Navigate to='/' />} />
+              <Route path='/profile/:userId' element={isAuth ? <ProfilePage /> : <Navigate to='/' />} />
+            </Routes>
+            <ToastContainer />
+          </ThemeProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
     </div>
   )
 }

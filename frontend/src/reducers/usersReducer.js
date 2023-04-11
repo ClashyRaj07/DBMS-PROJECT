@@ -16,6 +16,7 @@ export const profileReducer = (state = {user: {}} , action) => {
   switch (action.type) {
     case 'GET_USER_REQUEST':
     case 'UPDATE_USER_REQUEST':
+    case 'NEW_USER_REQUEST':
       return {
         ...state,
         loading: true
@@ -32,7 +33,14 @@ export const profileReducer = (state = {user: {}} , action) => {
         loading: false,
         isUpdated: action.payload
       }
+    case 'NEW_USER_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        isCreated: action.payload
+      }
     case 'GET_USER_FAIL':
+    case 'NEW_USER_FAIL':
       return {
         ...state,
         loading: false,

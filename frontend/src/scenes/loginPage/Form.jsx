@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLogin } from "state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "../../components/FlexBetween";
-import { loginUser } from "../../actions/usersAction";
+import { clearErrors, loginUser, registerUser } from "../../actions/usersAction";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -58,7 +58,7 @@ const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
-
+  const { isCreated } = useSelector(state => state.profile)
   const register = async (values, onSubmitProps) => {
     if (image) {
       values.picturePath = image;
@@ -69,21 +69,9 @@ const Form = () => {
     for (let value in values) {
       formData.append(value, values[value]);
     }
-    formData.append("picturePath", values.picture.name);
-
-    const savedUserResponse = await fetch(
-      "http://localhost:3001/auth/register",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-    const savedUser = await savedUserResponse.json();
-    // onSubmitProps.resetForm();
-
-    if (savedUser) {
-      setPageType("login");
-    }
+    formData.append("picturePath", image);
+    console.log("Near to register dispatch");
+    dispatch(registerUser(formData))
   };
 
   const login = async (values, onSubmitProps) => {
@@ -114,8 +102,12 @@ const Form = () => {
   // const {user}=useSelector(state=>state.user)
 
   useEffect(() => {
+    if (isCreated) {
 
-  }, [image])
+      setPageType('login')
+      dispatch(clearErrors())
+    }
+  }, [isCreated])
 
   return (
     <Formik

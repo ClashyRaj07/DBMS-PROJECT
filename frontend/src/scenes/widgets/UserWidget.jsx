@@ -12,11 +12,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserUpdate from '../../components/UserUpdate'
+import { getUser } from "../../actions/usersAction";
 
 const UserWidget = ({ userId, picturePath }) => {
   const dispatch = useDispatch();
   const { palette } = useTheme();
-  const { user } = useSelector((state => state.profile))
+  const { user, isUpdated } = useSelector((state => state.profile))
   const navigate = useNavigate();
   // const token = useSelector((state) => state.token);
   // const token = useSelector((state) => state.token);
@@ -27,18 +28,14 @@ const UserWidget = ({ userId, picturePath }) => {
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-  const getUser = async () => {
-    if (userId) dispatch(getUser(userId));
-  };
+
 
   useEffect(() => {
-    getUser();
+    dispatch(getUser(userId));
 
-  }, []);
+  }, [isUpdated]);
 
-  if (!user) {
-    return null;
-  }
+
 
   const {
 

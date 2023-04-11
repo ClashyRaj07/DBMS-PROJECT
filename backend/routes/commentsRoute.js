@@ -1,56 +1,59 @@
-const express = require("express")
-const makeQuery = require("../dbQuery.js")
+import express from 'express'
+import makeQuery from '../dbQuery.js'
+import { addComment, getComments } from '../controllers/commentsConroller.js'
+
 const router = express.Router()
 
-// Create new Post
-router.post("/create",(req,res)=>{
+// // Create new Post
+// router.post('/create', (req, res) => {
 
-    const {comment,commentingUserId,postId} = req.body
+//   const {comment, commentingUserId, postId} = req.body
 
-    const q = `INSERT INTO comments (comment ,postId,commentingUserId) VALUES ('${comment}','${postId}',${commentingUserId})`
+//   const q = `INSERT INTO comments (comment ,postId,commentingUserId) VALUES ('${comment}','${postId}',${commentingUserId})`
 
-    makeQuery(q,res);
-})
+//   makeQuery(q, res)
+// })
 
-// Get all comments of user by userId
-router.get("/user/:id",(req,res)=>{
-    
-    const userId = req.params.id
+// // Get all comments of user by userId
+// router.get('/user/:id', (req, res) => {
 
-    const q = `SELECT * FROM comments WHERE commentingUserId=${userId}`
+//   const userId = req.params.id
 
-    makeQuery(q,res);
-})
+//   const q = `SELECT * FROM comments WHERE commentingUserId=${userId}`
 
+//   makeQuery(q, res)
+// })
 
-// Get Comment of Post by postId
-router.get("/post/:id",(req,res)=>{
-    const postId = req.params.id
+// // Get Comment of Post by postId
+// router.get('/post/:id', (req, res) => {
+//   const postId = req.params.id
 
-    const q = `SELECT * FROM comments WHERE postId=${postId}`
+//   const q = `SELECT * FROM comments WHERE postId=${postId}`
 
-    makeQuery(q,res);
-})
+//   makeQuery(q, res)
+// })
 
-//Update Comment 
-router.put('/:id',(req,res)=>{
-    const commentId=req.params.id;
-    const {comment}=req.body;
-    if(comment){
-        const q=`UPDATE comments SET comment='${comment}' WHERE commentId='${commentId}'`;
-        
-        makeQuery(q,res);
-    }  
-})
+// // Update Comment 
+// router.put('/:id', (req, res) => {
+//   const commentId = req.params.id
+//   const {comment} = req.body
+//   if (comment) {
+//     const q = `UPDATE comments SET comment='${comment}' WHERE commentId='${commentId}'`
 
-// Delete comment by commentId
+//     makeQuery(q, res)
+//   }
+// })
 
-router.delete("/:commentId",(req,res)=>{
-    const commentId = req.params.commentId
+// // Delete comment by commentId
 
-    const q = `DELETE FROM comments WHERE commentId='${commentId}'`
-    
-    makeQuery(q,res);
-})
+// router.delete('/:commentId', (req, res) => {
+//   const commentId = req.params.commentId
 
-module.exports = router
+//   const q = `DELETE FROM comments WHERE commentId='${commentId}'`
+
+//   makeQuery(q, res)
+// })
+
+router.get('/', getComments)
+router.post('/add', addComment)
+export default router

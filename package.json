@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/KartikSingh023/Sociopedia#readme",
   "dependencies": {
-    "cloudinary": "^1.35.0"
+    "bcrypt": "^5.1.0",
+    "cloudinary": "^1.35.0",
+    "cookie-parser": "^1.4.6",
+    "jsonwebtoken": "^9.0.0"
   }
 }

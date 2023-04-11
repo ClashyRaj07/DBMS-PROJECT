@@ -1,5 +1,5 @@
-const express = require('express')
-const makeQuery = require('../dbQuery.js')
+import express from 'express'
+import makeQuery from '../dbQuery.js'
 const router = express.Router()
 
 // Get User Details
@@ -34,4 +34,4 @@ router.delete('/:id', (req, res) => {
   makeQuery(q, res)
 })
 
-module.exports = router
+export default router

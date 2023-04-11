@@ -1,14 +1,17 @@
 import axios from "axios";
 
-export const getAllPosts=()=>async (dispatch)=>{
+export const getAllPosts=(userId)=>async (dispatch)=>{
     try {
          dispatch({type:"GET_ALL_POSTS_REQUEST"})
 
         const options={
-            headers: { "Content-Type": "application/json" }
+            
+            withCredentials:true,
+            headers:{ "Content-Type": "application/json"}
+            
         }
-        const {data}= await axios.get('http://localhost:5000/posts/all');
-        console.log("post data -->",data);
+        const {data}= await axios.get(`http://localhost:5000/posts/`,options);
+       
         dispatch({type:"GET_ALL_POSTS_SUCCESS",payload:data.data})
 
         
@@ -24,11 +27,13 @@ export const newPost=(postData)=>async (dispatch)=>{
      try {
         dispatch({type:'NEW_POSTS_REQUEST'})
 
-        const config = { headers: {
-    'Content-Type': 'application/json',
-    
-  }}
-        const {data}=await axios.post(`http://localhost:5000/posts/create`,postData,{config})
+        const options={
+            
+            withCredentials:true,
+            headers:{ "Content-Type": "application/json"}
+            
+        }
+        const {data}=await axios.post(`http://localhost:5000/posts/create`,postData,options)
 
         dispatch({type:'NEW_POSTS_SUCCESS',payload:data.success})
         

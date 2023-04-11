@@ -1,4 +1,4 @@
-const mysql = require('mysql2')
+import mysql from 'mysql2'
 
 const db = mysql.createConnection({
   host: 'localhost',
@@ -7,4 +7,4 @@ const db = mysql.createConnection({
   database: 'DBMS_PROJECT'
 })
 
-module.exports = db
+export default db

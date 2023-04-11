@@ -29,6 +29,7 @@ import * as yup from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, getUser, updateUser } from '../actions/usersAction';
+import { getAllPosts } from '../actions/postActions';
 
 
 
@@ -128,7 +129,6 @@ export default function FullScreenDialog() {
         }
         if (isUpdated) {
             setOpen(false)
-            dispatch(getUser(user.userId))
             dispatch(clearErrors())
         }
 
