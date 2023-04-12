@@ -21,6 +21,7 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("User id", userId);
     dispatch(setFriends(userId));
     if (!user || user === null) {
       navigate('/');

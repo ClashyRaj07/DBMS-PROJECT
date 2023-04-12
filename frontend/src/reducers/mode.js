@@ -1,6 +1,6 @@
 export const modeReducer =
     () =>
-    (state = {}, action) => {
+    (state = { mode: "dark" }, action) => {
         switch (action.type) {
             case "DARK_MODE":
                 return {

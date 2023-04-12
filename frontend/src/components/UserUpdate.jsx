@@ -7,7 +7,6 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import SendIcon from '@mui/icons-material/Send';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
@@ -26,10 +25,10 @@ import {
 } from '@mui/material';
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, getUser, updateUser } from '../actions/usersAction';
-import { getAllPosts } from '../actions/postActions';
+import { clearErrors, updateUser } from '../actions/usersAction';
+
 
 
 

@@ -4,17 +4,16 @@ import {
   FavoriteOutlined,
   ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import { IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import Friend from "../../components/Friend";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPost } from "state";
-import { likePost } from "../../actions/postActions";
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import axios from "axios";
 import CommentWidget from "./CommentWidget";
+
 
 const PostWidget = ({
   postId,
@@ -25,7 +24,6 @@ const PostWidget = ({
   createdAt,
   picturePath,
   userPicturePath,
-
   comments,
 }) => {
   const [isComments, setIsComments] = useState(false);
@@ -42,7 +40,7 @@ const PostWidget = ({
   const { isLoading, error, data } = useQuery('likes', () => axios.get(`http://localhost:5000/likes?postId=${postId}`, { withCredentials: true }).then(res => {
     setlikes([]);
     setlikes([...new Set(res.data.data)])
-    setIsLiked(likes.includes(loggedInUserId) === true)
+    setIsLiked(likes.includes(loggedInUserId) ? true : false)
   }));
 
 
@@ -68,7 +66,7 @@ const PostWidget = ({
 
   useEffect(() => {
 
-  }, [isLiked])
+  }, [likes, isLoading])
   return (
     <WidgetWrapper m="2rem 0">
       <Friend
@@ -96,7 +94,7 @@ const PostWidget = ({
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
             <IconButton onClick={handleClick}>
-              {isLiked ? (
+              {likes && likes.includes(loggedInUserId) ? (
                 <FavoriteOutlined sx={{ color: primary }} />
               ) : (
                 <FavoriteBorderOutlined />

@@ -12,11 +12,6 @@ const FriendListWidget = ({ userId, title }) => {
   const dispatch = useDispatch();
   const { friendsList: friends } = useSelector(state => state.friends)
   const { palette } = useTheme();
-  // const { isLoading, data: relationshipData } = useQuery('relationships', () => axios.get(`http://localhost:5000/relationships?followedUserId=${userId}`, { withCredentials: true }).then(res => {
-  //   dispatch(setFriends(res.data.data))
-
-  // }));
-
 
   const queryClient = useQueryClient();
   const mutation = useMutation(

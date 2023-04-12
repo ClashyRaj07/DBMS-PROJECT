@@ -13,7 +13,7 @@ import { setFriends } from '../../actions/friendsAction'
 const HomePage = () => {
   const dispatch = useDispatch();
   const isNonMobileScreens = useMediaQuery('(min-width:1000px)')
-  const { userId: _id, picturePath } = useSelector((state) => state.profile)
+  const _id = useSelector(state => state.profile.user.userId);
   const { user, isUpdated } = useSelector(state => state.profile)
 
 
@@ -34,11 +34,11 @@ const HomePage = () => {
           gap='0.5rem'
           justifyContent='space-between'>
           <Box flexBasis={isNonMobileScreens ? '26%' : undefined}>
-            <UserWidget userId={_id} picturePath={picturePath} />
+            <UserWidget userId={_id} picturePath={user.picturePath} />
           </Box>
 
           <Box flexBasis={isNonMobileScreens ? '42%' : undefined} mt={isNonMobileScreens ? undefined : '2rem'} height={'85vh'} overflow={'scroll'}>
-            <MyPostWidget picturePath={picturePath} />
+            <MyPostWidget picturePath={user.picturePath} />
             <PostsWidget userId={_id} />
           </Box>
 
