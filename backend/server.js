@@ -2,11 +2,16 @@ import express from "express";
 import bodyParser from "body-parser";
 import cloudinary from "cloudinary";
 import cors from "cors";
+import { fileURLToPath } from "url";
+
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
 // IMPLEMENTING MIDDLEWARES
 dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 5000;
@@ -38,6 +43,7 @@ import likedPostRoute from "./routes/likedPostRoute.js";
 import commentsRoute from "./routes/commentsRoute.js";
 
 import relationshipsRoute from "./routes/relationships.js";
+import path from "path";
 
 cloudinary.config({
     cloud_name: "dbhf7xh4q",
@@ -56,6 +62,11 @@ app.use("/comments", commentsRoute);
 app.use("/likes", likedPostRoute);
 
 app.use("/relationships", relationshipsRoute);
+
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+});
 
 app.listen(PORT, () => {
     console.log(`App listening at ${PORT}`);
