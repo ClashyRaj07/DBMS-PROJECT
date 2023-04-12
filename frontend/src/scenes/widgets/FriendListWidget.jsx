@@ -1,34 +1,50 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import Friend from "../../components/Friend";
 import WidgetWrapper from "../../components/WidgetWrapper";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFriends } from "state";
 
-const FriendListWidget = ({ userId }) => {
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import axios from "axios";
+
+const FriendListWidget = ({ userId, title }) => {
   const dispatch = useDispatch();
+  const [friends, setFriends] = useState([]);
   const { palette } = useTheme();
-  // const token = useSelector((state) => state.token);
-  const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MjE5MDEwNGRkZTVlNjY2NWYzZWQ1MiIsImlhdCI6MTY3OTkyMjQwOX0.jT5j7tlfby13a-2P5zSjGX9lKUJhppATMR2AmCdl0gg"
-  // const friends = useSelector((state) => state.user.friends);
-  const friends=[];
+  const { isLoading, data: relationshipData } = useQuery('relationships', () => axios.get(`http://localhost:5000/relationships?followedUserId=${userId}`, { withCredentials: true }).then(res => {
+    dispatch(setFriends(res.data.data))
+
+  }));
+
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    (liked) => {
+      if (!liked) return axios.post(`http://localhost:5000/likes`, {}, { withCredentials: true })
+
+
+      return axios.delete(`http://localhost:5000/likes?userId=${userId}`, { withCredentials: true })
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['likes'])
+      }
+    }
+  )
+
+  const handleClick = () => {
+    mutation.mutate()
+
+  }
 
   const getFriends = async () => {
-    const response = await fetch(
-      `http://localhost:3001/users/${userId}/friends`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    const data = await response.json();
-    dispatch(setFriends({ friends: data }));
+
   };
 
   useEffect(() => {
+    console.log(friends);
     getFriends();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+  }, []);
   return (
     <WidgetWrapper>
       <Typography
@@ -37,12 +53,12 @@ const FriendListWidget = ({ userId }) => {
         fontWeight="500"
         sx={{ mb: "1.5rem" }}
       >
-        Friend List
+        {title}
       </Typography>
       <Box display="flex" flexDirection="column" gap="1.5rem">
-        {friends.map((friend) => (
+        {friends.length > 0 && friends.map((friend) => (
           <Friend
-            key={friend._id}
+            key={friend}
             friendId={friend._id}
             name={`${friend.firstName} ${friend.lastName}`}
             subtitle={friend.occupation}

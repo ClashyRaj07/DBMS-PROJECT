@@ -1,37 +1,41 @@
-import express from 'express'
-import makeQuery from '../dbQuery.js'
-const router = express.Router()
+import express from "express";
+import { getUser, updateUser } from "../controllers/userController.js";
+// import makeQuery from '../dbQuery.js'
+const router = express.Router();
 
 // Get User Details
-router.get('/:id', (req, res) => {
-  const userId = req.params.id
-  const q = `SELECT * FROM user WHERE userId=${userId}`
+// router.get('/:id', (req, res) => {
+//   const userId = req.params.id
+//   const q = `SELECT * FROM user WHERE userId=${userId}`
 
-  makeQuery(q, res)
-})
+//   makeQuery(q, res)
+// })
 
-// Update User Details
-router.put('/:id', (req, res) => {
-  const userId = req.params.id
-  const {firstName, lastName, location, occupation, picturePath} = req.body
+// // Update User Details
+// router.put('/:id', (req, res) => {
+//   const userId = req.params.id
+//   const {firstName, lastName, location, occupation, picturePath} = req.body
 
-  if (userId) {
-    const q = `UPDATE user SET firstName='${firstName}',lastName='${lastName}',location='${location}',occupation='${occupation}',picturePath='${picturePath}' WHERE userId='${userId}'`
-    makeQuery(q, res)
-  }else {
-    return res.status(200).json({
-      success: false,
-      message: 'Please Enter valid userName.'
-    })
-  }
-})
+//   if (userId) {
+//     const q = `UPDATE user SET firstName='${firstName}',lastName='${lastName}',location='${location}',occupation='${occupation}',picturePath='${picturePath}' WHERE userId='${userId}'`
+//     makeQuery(q, res)
+//   }else {
+//     return res.status(200).json({
+//       success: false,
+//       message: 'Please Enter valid userName.'
+//     })
+//   }
+// })
 
-// Delete User Account/Details
-router.delete('/:id', (req, res) => {
-  const userId = req.params.id
+// // Delete User Account/Details
+// router.delete('/:id', (req, res) => {
+//   const userId = req.params.id
 
-  const q = `DELETE FROM user WHERE userId='${userId}'`
-  makeQuery(q, res)
-})
+//   const q = `DELETE FROM user WHERE userId='${userId}'`
+//   makeQuery(q, res)
+// })
 
-export default router
+router.get("/", getUser);
+router.put("/", updateUser);
+
+export default router;

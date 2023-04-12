@@ -1,10 +1,8 @@
-import mysql from 'mysql2'
+import mysql from "mysql2";
+import dotenv from "dotenv";
+dotenv.config();
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Bharat0509',
-  database: 'DBMS_PROJECT'
-})
+const db = mysql.createConnection(process.env.DATABASE_URL);
+console.log("Connected to PlanetScale Database!");
 
-export default db
+export default db;

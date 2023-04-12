@@ -13,7 +13,6 @@ import { getUser } from "../../actions/usersAction";
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const { userId } = useParams();
-  const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { user } = useSelector(state => state.profile)
 
@@ -45,15 +44,20 @@ const ProfilePage = () => {
             <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
               <UserWidget userId={userId} picturePath={user.picturePath} />
               <Box m="2rem 0" />
-              <FriendListWidget userId={userId} />
+              <FriendListWidget userId={userId} title={"Friends List"} />
             </Box>
             <Box
+              height={'85vh'} overflow={'scroll'}
+
               flexBasis={isNonMobileScreens ? "42%" : undefined}
               mt={isNonMobileScreens ? undefined : "2rem"}
             >
               <MyPostWidget picturePath={user.picturePath} />
               <Box m="2rem 0" />
               <PostsWidget userId={userId} isProfile />
+            </Box>
+            <Box>
+              <FriendListWidget userId={userId} title={"Friends Requests"} />
             </Box>
           </Box>
         </Box>

@@ -1,5 +1,5 @@
 import express from 'express'
-import makeQuery from '../dbQuery.js'
+
 import { addComment, getComments } from '../controllers/commentsConroller.js'
 
 const router = express.Router()

@@ -14,16 +14,14 @@ import { useNavigate } from "react-router-dom";
 import UserUpdate from '../../components/UserUpdate'
 import { getUser } from "../../actions/usersAction";
 
-const UserWidget = ({ userId, picturePath }) => {
+const UserWidget = ({ userId }) => {
   const dispatch = useDispatch();
   const { palette } = useTheme();
   const { user, isUpdated } = useSelector((state => state.profile))
   const navigate = useNavigate();
   // const token = useSelector((state) => state.token);
   // const token = useSelector((state) => state.token);
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MjE5MDEwNGRkZTVlNjY2NWYzZWQ1MiIsImlhdCI6MTY3OTkyMjQwOX0.jT5j7tlfby13a-2P5zSjGX9lKUJhppATMR2AmCdl0gg"
   // const friends = useSelector((state) => state.user.friends);
-  const friend = [];
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
@@ -33,17 +31,17 @@ const UserWidget = ({ userId, picturePath }) => {
   useEffect(() => {
     dispatch(getUser(userId));
 
-  }, [isUpdated]);
+  }, [dispatch, isUpdated, userId]);
 
 
 
   const {
 
-    firstName = "bharat",
-    lastName = "bharat",
-    location = "tala",
-    occupation = "tala",
-    viewedProfile = "tala",
+    firstName,
+    lastName,
+    location,
+    occupation,
+    viewedProfile,
     impressions = 122,
     friends = [],
   } = user;
@@ -57,7 +55,7 @@ const UserWidget = ({ userId, picturePath }) => {
         onClick={() => navigate(`/profile/${user.userId}`)}
       >
         <FlexBetween gap="1rem">
-          <UserImage image={picturePath} />
+          <UserImage image={user.picturePath} />
           <Box>
             <Typography
               variant="h4"
