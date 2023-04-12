@@ -7,7 +7,7 @@ import {
 } from "../controllers/relationships.js";
 
 router.get("/", getRelationships);
-router.put("/", addRelationships);
+router.post("/", addRelationships);
 router.delete("/", deleteRelationships);
 
 export default router;

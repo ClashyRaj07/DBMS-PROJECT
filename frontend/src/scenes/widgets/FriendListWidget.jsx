@@ -6,15 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
+import { setFriends } from "../../actions/friendsAction";
 
 const FriendListWidget = ({ userId, title }) => {
   const dispatch = useDispatch();
-  const [friends, setFriends] = useState([]);
+  const { friendsList: friends } = useSelector(state => state.friends)
   const { palette } = useTheme();
-  const { isLoading, data: relationshipData } = useQuery('relationships', () => axios.get(`http://localhost:5000/relationships?followedUserId=${userId}`, { withCredentials: true }).then(res => {
-    dispatch(setFriends(res.data.data))
+  // const { isLoading, data: relationshipData } = useQuery('relationships', () => axios.get(`http://localhost:5000/relationships?followedUserId=${userId}`, { withCredentials: true }).then(res => {
+  //   dispatch(setFriends(res.data.data))
 
-  }));
+  // }));
 
 
   const queryClient = useQueryClient();
@@ -32,19 +33,13 @@ const FriendListWidget = ({ userId, title }) => {
     }
   )
 
-  const handleClick = () => {
-    mutation.mutate()
 
-  }
 
-  const getFriends = async () => {
 
-  };
 
   useEffect(() => {
-    console.log(friends);
-    getFriends();
-  }, []);
+    dispatch(setFriends(userId))
+  }, [dispatch, userId]);
   return (
     <WidgetWrapper>
       <Typography
@@ -56,9 +51,9 @@ const FriendListWidget = ({ userId, title }) => {
         {title}
       </Typography>
       <Box display="flex" flexDirection="column" gap="1.5rem">
-        {friends.length > 0 && friends.map((friend) => (
+        {friends.length > 0 && friends.map((friend, i) => (
           <Friend
-            key={friend}
+            key={i}
             friendId={friend._id}
             name={`${friend.firstName} ${friend.lastName}`}
             subtitle={friend.occupation}

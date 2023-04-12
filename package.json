@@ -1,22 +1,24 @@
 {
-  "name": "sociopedia",
+  "name": "twiktik",
   "version": "1.0.0",
-  "description": "Complete React MERN Full Stack Social Media App",
+  "type": "module",
+  "description": "Complete React Full Stack Social Media App with MYSql database",
   "main": "backend/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server.js",
+    "build": "npm install && cd client && npm install && npm run build && cd ..",
+    "dev": "nodemon backend/server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KartikSingh023/Sociopedia.git"
-  },
-  "author": "",
+  "author": "bharat0509",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/KartikSingh023/Sociopedia/issues"
-  },
-  "homepage": "https://github.com/KartikSingh023/Sociopedia#readme",
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.2.0",
+    "nodemon": "^2.0.22",
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.35.0",
     "cookie-parser": "^1.4.6",

@@ -65,7 +65,7 @@ const CommentWidget = ({ postId }) => {
             </FlexBetween>
             {comments && comments?.length > 0 && comments.map((comment, i) => (
 
-                <Box key={comment.id} >
+                <Box key={i} >
                     <Divider />
                     <Box gap="1rem" display={'flex'} width={'30%'} margin={'.5rem'}>
                         <UserImage image={comment.picturePath} size="40px" />

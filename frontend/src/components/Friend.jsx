@@ -6,15 +6,17 @@ import { setFriends } from "state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
 import moment from 'moment'
+import { useMutation, useQueryClient } from "react-query";
+import axios from "axios";
+import { followUser, unfollowUser } from "../actions/friendsAction";
 
 
 
 const Friend = ({ friendId, name, createdAt, userPicturePath }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { _id } = useSelector((state) => state.profile);
-  const token = useSelector((state) => state.token);
-  const friends = useSelector((state) => state.profile.friends);
+  const { user } = useSelector((state) => state.profile);
+  const { friendsList: friends } = useSelector((state) => state.friends);
 
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
@@ -22,21 +24,20 @@ const Friend = ({ friendId, name, createdAt, userPicturePath }) => {
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  const isFriend = friends?.find((friend) => friend._id === friendId);
+  const isFriend = friends?.includes(friendId);
+
+
+
 
   const patchFriend = async () => {
-    // const response = await fetch(
-    //   `http://localhost:3001/users/${_id}/${friendId}`,
-    //   {
-    //     method: "PATCH",
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //       "Content-Type": "application/json",
-    //     },
-    //   }
-    // );
-    // const data = await response.json();
-    // dispatch(setFriends({ friends: data }));
+    if (isFriend) {
+      dispatch(unfollowUser(friendId));
+
+    }
+    else {
+
+      dispatch(followUser(friendId))
+    }
   };
 
   return (
@@ -66,17 +67,17 @@ const Friend = ({ friendId, name, createdAt, userPicturePath }) => {
             {moment(createdAt).fromNow()}
           </Typography>
         </Box>
-      </FlexBetween>
-      <IconButton
-        onClick={() => patchFriend()}
-        sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
-      >
-        {isFriend ? (
-          <PersonRemoveOutlined sx={{ color: primaryDark }} />
-        ) : (
-          <PersonAddOutlined sx={{ color: primaryDark }} />
-        )}
-      </IconButton>
+      </FlexBetween>{friendId !== user.userId &&
+        <IconButton
+          onClick={() => patchFriend()}
+          sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+        >
+          {isFriend ? (
+            <PersonRemoveOutlined sx={{ color: primaryDark }} />
+          ) : (
+            <PersonAddOutlined sx={{ color: primaryDark }} />
+          )}
+        </IconButton>}
     </FlexBetween>
   );
 };

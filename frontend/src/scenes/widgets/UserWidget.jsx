@@ -1,5 +1,4 @@
 import {
-  ManageAccountsOutlined,
   EditOutlined,
   LocationOnOutlined,
   WorkOutlineOutlined,
@@ -9,19 +8,19 @@ import UserImage from "../../components/UserImage";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { useDispatch, useSelector } from "react-redux";
+// eslint-disable-next-line no-unused-vars
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserUpdate from '../../components/UserUpdate'
 import { getUser } from "../../actions/usersAction";
+import { setFriends } from '../../actions/friendsAction'
 
 const UserWidget = ({ userId }) => {
   const dispatch = useDispatch();
   const { palette } = useTheme();
   const { user, isUpdated } = useSelector((state => state.profile))
   const navigate = useNavigate();
-  // const token = useSelector((state) => state.token);
-  // const token = useSelector((state) => state.token);
-  // const friends = useSelector((state) => state.user.friends);
+  const { friendsList: friends } = useSelector(state => state.friends)
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
@@ -30,6 +29,7 @@ const UserWidget = ({ userId }) => {
 
   useEffect(() => {
     dispatch(getUser(userId));
+    dispatch(setFriends(userId))
 
   }, [dispatch, isUpdated, userId]);
 
@@ -42,8 +42,8 @@ const UserWidget = ({ userId }) => {
     location,
     occupation,
     viewedProfile,
-    impressions = 122,
-    friends = [],
+    impressions,
+
   } = user;
 
   return (
@@ -70,7 +70,7 @@ const UserWidget = ({ userId }) => {
             >
               {firstName} {lastName}
             </Typography>
-            <Typography color={medium}>{friends.length} friends</Typography>
+            <Typography color={medium}>{friends ? friends.length : ""} friends</Typography>
           </Box>
         </FlexBetween>
 

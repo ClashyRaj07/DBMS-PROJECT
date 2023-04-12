@@ -1,23 +1,27 @@
 import { Box, useMediaQuery } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Navbar from '../navbar'
 import UserWidget from '../widgets/UserWidget'
 import MyPostWidget from '../widgets/MyPostWidget'
 import PostsWidget from '../widgets/PostsWidget'
 import AdvertWidget from '../widgets/AdvertWidget'
 import FriendListWidget from '../widgets/FriendListWidget'
-import { Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import Loader from '../../components/Loader'
+import { setFriends } from '../../actions/friendsAction'
 
 const HomePage = () => {
+  const dispatch = useDispatch();
   const isNonMobileScreens = useMediaQuery('(min-width:1000px)')
-  const { userId: _id, picturePath = 'https://imgs.search.brave.com/tfPSA7_h4u0xIonW23pcAmplHavUbB2DZeVlrNMgKSA/rs:fit:844:225:1/g:ce/aHR0cHM6Ly90c2U0/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC50/UVhnOGpEY0NaVHpS/WVNwUnJtWHR3SGFF/SyZwaWQ9QXBp' } = useSelector((state) => state.profile)
+  const { userId: _id, picturePath } = useSelector((state) => state.profile)
   const { user, isUpdated } = useSelector(state => state.profile)
+
+
   useEffect(
     () => {
+      dispatch(setFriends(_id))
 
-    }, [user, isUpdated]
+    }, [user, isUpdated, dispatch, _id]
   )
   return (
     <>{!user ? <Loader /> :

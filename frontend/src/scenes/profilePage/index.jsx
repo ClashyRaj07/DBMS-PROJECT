@@ -9,6 +9,7 @@ import PostsWidget from "../widgets/PostsWidget";
 import UserWidget from "../widgets/UserWidget";
 import Loader from '../../components/Loader'
 import { getUser } from "../../actions/usersAction";
+import { setFriends } from "../../actions/friendsAction";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -16,14 +17,15 @@ const ProfilePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { user } = useSelector(state => state.profile)
 
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    // dispatch(getUser(userId));
+    dispatch(setFriends(userId));
     if (!user || user === null) {
       navigate('/');
     }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [dispatch, navigate, user, userId]);
 
 
 
