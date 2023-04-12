@@ -18,6 +18,8 @@ node_modules
 
 # misc
 .env
+.env.example
+.env.staging
 .DS_Store
 .env.local
 .env.development.local
