@@ -21,13 +21,14 @@ import {
   Close,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout } from "state";
+
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
-import { logout } from "../../actions/usersAction";
+import { logout, setMode } from "../../actions/usersAction";
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
+  const { mode } = useSelector(state => state.mode)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -150,7 +151,7 @@ const Navbar = () => {
             gap="3rem"
           >
             <IconButton
-              onClick={() => dispatch(setMode())}
+              onClick={() => dispatch(setMode(mode === 'dark' ? "light" : "dark"))}
               sx={{ fontSize: "25px" }}
             >
               {theme.palette.mode === "dark" ? (
@@ -183,7 +184,7 @@ const Navbar = () => {
                 <MenuItem value={fullName}>
                   <Typography>{fullName}</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
+                <MenuItem onClick={() => dispatch(logout())}>
                   Log Out
                 </MenuItem>
               </Select>

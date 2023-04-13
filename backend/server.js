@@ -18,7 +18,6 @@ const PORT = 5000;
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb" }));
 app.use(bodyParser({ extended: true }));
-app.use(cookieParser());
 
 const corsOptions = {
     origin: [
@@ -26,6 +25,8 @@ const corsOptions = {
         "http://127.0.0.1:3000",
         "http://localhost:5000",
         "http://localhost:3000",
+        "https://twiktik.onrender.com",
+        "https://twiktik.onrender.com/",
     ],
     optionsSuccessStatus: 200,
     credentials: true,

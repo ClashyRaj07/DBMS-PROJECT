@@ -8,15 +8,15 @@ import thunk from "redux-thunk";
 import { postReducer, postsReducer } from "./reducers/postsReducer";
 import { profileReducer, usersReducer } from "./reducers/usersReducer";
 import { friendsReducer } from "./reducers/friendsReducers";
-import { modeReducer } from "./reducers/mode";
+import { modeReducer } from "./reducers/modeReducer";
 
 const reducer = combineReducers({
-    mode: modeReducer,
     posts: postsReducer,
     post: postReducer,
     users: usersReducer,
     profile: profileReducer,
     friends: friendsReducer,
+    mode: modeReducer,
 });
 
 function saveToLacalStorage(store) {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import Axios from "../Axios";
 
 export const setFriends = (userId) => async (dispatch) => {
     try {
@@ -10,8 +11,8 @@ export const setFriends = (userId) => async (dispatch) => {
                 "Content-Type": "application/json",
             },
         };
-        const { data } = await axios.get(
-            `http://localhost:5000/relationships?followedUserId=${userId}`,
+        const { data } = await Axios.get(
+            `/relationships?followedUserId=${userId}`,
             { config }
         );
 
@@ -34,8 +35,8 @@ export const unfollowUser = (userId) => async (dispatch) => {
                 "Content-Type": "application/json",
             },
         };
-        const { data } = await axios.delete(
-            `http://localhost:5000/relationships?followedUserId=${userId}`,
+        const { data } = await Axios.delete(
+            `/relationships?followedUserId=${userId}`,
             { config }
         );
 
@@ -58,8 +59,8 @@ export const followUser = (userId) => async (dispatch) => {
                 "Content-Type": "application/json",
             },
         };
-        const { data } = await axios.post(
-            `http://localhost:5000/relationships?followedUserId=${userId}`,
+        const { data } = await Axios.post(
+            `/relationships?followedUserId=${userId}`,
             { config }
         );
 
