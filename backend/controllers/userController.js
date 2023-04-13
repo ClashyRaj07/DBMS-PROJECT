@@ -3,7 +3,7 @@ import db from "../db.js";
 import cloudinary from "cloudinary";
 
 export const getUser = (req, res) => {
-    const token = req.cookies.token;
+    const { token } = req.cookies;
     if (!token)
         return res
             .status(401)

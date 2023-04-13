@@ -1,5 +1,4 @@
 import express from "express";
-import bodyParser from "body-parser";
 import cloudinary from "cloudinary";
 import cors from "cors";
 import { fileURLToPath } from "url";
@@ -12,12 +11,12 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
-
 const app = express();
+
 const PORT = 5000;
 app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb" }));
-app.use(bodyParser({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(cookieParser("secretKey"));
 
 const corsOptions = {
     origin: [
@@ -25,8 +24,6 @@ const corsOptions = {
         "http://127.0.0.1:3000",
         "http://localhost:5000",
         "http://localhost:3000",
-        "https://twiktik.onrender.com",
-        "https://twiktik.onrender.com/",
     ],
     optionsSuccessStatus: 200,
     credentials: true,

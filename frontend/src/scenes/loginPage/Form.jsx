@@ -8,15 +8,12 @@ import {
   useTheme,
   Avatar
 } from '@mui/material';
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setLogin } from "state";
-import Dropzone from "react-dropzone";
-import FlexBetween from "../../components/FlexBetween";
 import { clearErrors, loginUser, registerUser } from "../../actions/usersAction";
+import { toast } from 'react-toastify'
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -58,7 +55,7 @@ const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
-  const { isCreated } = useSelector(state => state.profile)
+  const { isCreated, error } = useSelector(state => state.profile)
   const register = async (values, onSubmitProps) => {
     if (image) {
       values.picturePath = image;
@@ -103,12 +100,17 @@ const Form = () => {
   // const {user}=useSelector(state=>state.user)
 
   useEffect(() => {
+    if (error) {
+      toast(error, { type: "info" })
+      dispatch(clearErrors());
+
+    }
     if (isCreated) {
 
       setPageType('login')
       dispatch(clearErrors())
     }
-  }, [isCreated])
+  }, [isCreated, error, dispatch])
 
   return (
     <Formik
