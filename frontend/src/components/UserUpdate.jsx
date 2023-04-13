@@ -96,7 +96,7 @@ export default function FullScreenDialog() {
 
 
         const formData = {
-            firstName, lastName, location, occupation, picturePath
+            firstName, lastName, location, occupation, picturePath, public_url: user.public_url
         }
         console.log("dispatch is ongoing");
         dispatch(updateUser(formData, user.userId))

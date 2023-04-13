@@ -9,7 +9,7 @@ export const getAllPosts = (userId) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.get(`${baseURL}/posts/`, options);
+        const { data } = await axios.get(`${baseURL}/posts`, options);
 
         dispatch({ type: "GET_ALL_POSTS_SUCCESS", payload: data.data });
     } catch (error) {
@@ -49,6 +49,7 @@ export const likePost = (liked_by, liked_postId) => async (dispatch) => {
         dispatch({ type: "LIKE_POSTS_REQUEST" });
 
         const options = {
+            withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
         const { data } = await axios.post(

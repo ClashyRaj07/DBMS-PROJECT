@@ -1,13 +1,14 @@
 import db from "../db.js";
 import jwt from "jsonwebtoken";
 export const getRelationships = (req, res) => {
-    let q = "SELECT followerUserId FROM relationships WHERE followedUserId=?";
+    let q =
+        "SELECT userId,firstName,lastName,location,picturePath FROM users as u JOIN (SELECT followerUserId FROM relationships WHERE followedUserId=?) as e ON u.userId=e.followerUserId;";
 
     db.query(q, [req.query.followedUserId], (err, data) => {
         if (err) return res.status(500).json({ success: false, data: err });
         return res.status(200).json({
             success: true,
-            data: data.map((relationship) => relationship.followerUserId),
+            data: data,
         });
     });
 };

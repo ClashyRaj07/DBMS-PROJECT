@@ -54,7 +54,7 @@ export const timelinePosts = async (req, res) => {
                 .status(401)
                 .json({ success: false, data: "Token Is Expired" });
 
-        let q = `SELECT p.*,u.userId as userId,firstName,lastName,picturePath FROM posts AS p JOIN users AS u ON (u.userId=p.userId)  LEFT JOIN relationships AS r ON (p.userId=r.followedUserId ) WHERE r.followerUserId=? OR p.userId = ? ORDER BY p.createdAt DESC `;
+        let q = `SELECT DISTINCT p.*,u.userId as userId,firstName,lastName,picturePath FROM posts AS p JOIN users AS u ON (u.userId=p.userId)  LEFT JOIN relationships AS r ON (p.userId=r.followedUserId ) WHERE r.followerUserId=? OR p.userId = ? ORDER BY p.createdAt DESC `;
 
         db.query(q, [userInfo.id, userInfo.id], (err, data) => {
             if (err) return res.status(500).json({ success: false, err });

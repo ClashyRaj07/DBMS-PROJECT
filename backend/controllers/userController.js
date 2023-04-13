@@ -39,11 +39,11 @@ export const updateUser = async (req, res) => {
                 .status(401)
                 .json({ success: false, data: "Token Is Expired" });
 
-        const q = "SELECT public_url FROM users WHERE userId=?";
+        let q = "SELECT public_url FROM users WHERE userId=?";
 
-        if (picturePath.length > 0) {
+        if (picturePath.length > 255) {
             db.query(q, [userInfo.id], async (err, data) => {
-                await cloudinary.v2.uploader.destroy(data.data.public_id);
+                await cloudinary.v2.uploader.destroy(data.data[0].public_id);
                 const myCloud = await cloudinary.v2.uploader.upload(
                     picturePath[0],
                     {
@@ -55,17 +55,24 @@ export const updateUser = async (req, res) => {
             });
         }
 
-        if (userId) {
-            const q =
-                "UPDATE users SET (`firstName`,`lastName`,`location`,`occupation`,`picturePath`,`public_url`) values (?,?,?,?,?,?)";
-            db.query(q, values, (err, data) => {});
-            if (err) return res.status(500).json({ success: false, data: err });
-            else return res.status(200).json({ success: true, data: data });
-        } else {
-            return res.status(200).json({
-                success: false,
-                message: "Please Enter valid userName.",
-            });
-        }
+        q =
+            "UPDATE users SET `firstName`=?,`lastName`=?,`location`=?,`occupation`=?,`picturePath`=?,`public_url`= ? WHERE userId = ?";
+        db.query(
+            q,
+            [
+                firstName,
+                lastName,
+                location,
+                occupation,
+                req.body.picturePath,
+                req.body.public_url,
+                userInfo.id,
+            ],
+            (err, data) => {
+                if (err)
+                    return res.status(500).json({ success: false, data: err });
+                else return res.status(200).json({ success: true, data: data });
+            }
+        );
     });
 };

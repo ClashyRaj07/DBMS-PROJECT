@@ -75,15 +75,11 @@ export const updateUser = (formData, userId) => async (dispatch) => {
     try {
         dispatch({ type: "UPDATE_USER_REQUEST" });
 
-        const config = {
-            headers: {
-                withCredentials: true,
-                "Content-Type": "application/json",
-            },
+        const options = {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.put(`${baseURL}/users`, formData, {
-            config,
-        });
+        const { data } = await axios.put(`${baseURL}/users`, formData, options);
 
         dispatch({ type: "UPDATE_USER_SUCCESS", payload: data.success });
     } catch (error) {
