@@ -21,6 +21,26 @@ export const getAllPosts = (userId) => async (dispatch) => {
     }
 };
 
+export const getUserPosts = (userId) => async (dispatch) => {
+    try {
+        dispatch({ type: "GET_ALL_POSTS_REQUEST" });
+
+        const options = {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
+        };
+        const { data } = await axios.get(`${baseURL}/posts/${userId}`, options);
+
+        dispatch({ type: "GET_ALL_POSTS_SUCCESS", payload: data.data });
+    } catch (error) {
+        console.log("post errro", error);
+        dispatch({
+            type: "GET_ALL_POSTS_FAIL",
+            payload: error.response.data.message,
+        });
+    }
+};
+
 export const newPost = (postData) => async (dispatch) => {
     try {
         dispatch({ type: "NEW_POSTS_REQUEST" });

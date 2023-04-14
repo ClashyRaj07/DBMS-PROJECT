@@ -76,11 +76,12 @@ export const getPost =
 
 // Get Posts of User
 export const getUserPosts = (req, res) => {
-    const userId = req.params.id;
+    let q = `SELECT DISTINCT p.*,u.userId as userId,firstName,lastName,picturePath FROM posts AS p JOIN users AS u ON (u.userId=p.userId) WHERE p.userId=? ORDER BY p.createdAt DESC `;
 
-    const q = `SELECT * FROM posts WHERE userId=${userId}`;
-
-    makeQuery(q, res);
+    db.query(q, [req.params.userId], (err, data) => {
+        if (err) return res.status(500).json({ success: false, err });
+        return res.status(200).json({ success: true, data: data });
+    });
 };
 
 // Update Post Details

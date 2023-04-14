@@ -23,16 +23,26 @@ export const addRelationships = async (req, res) => {
         if (err)
             return res
                 .status(401)
+
                 .json({ success: false, data: "Token Is Expired" });
+        let q =
+            "SELECT  * FROM relationships WHERE `followedUserId`=? AND `followerUserId`=?";
+        db.query(q, [req.body.userId, userInfo.id], (err, data) => {
+            if (data.length) {
+                return res.status(500).json("User already followed by you");
+            }
+            q =
+                "INSERT INTO relationships (`followedUserId`,`followerUserId`) VALUES (?,?)";
+            const values = [req.body.userId, userInfo.id];
 
-        let q = "INSERT INTO likes (`liked_postId`,`liked_by`) VALUES (?,?)";
-        const values = [req.body.postId, userInfo.id];
-
-        db.query(q, values, (err, data) => {
-            if (err) return res.status(500).json({ success: false, data: err });
-            return res
-                .status(200)
-                .json({ success: true, data: "Post has been Liked." });
+            db.query(q, values, (err, data) => {
+                if (err)
+                    return res.status(500).json({ success: false, data: err });
+                return res.status(200).json({
+                    success: true,
+                    data: "User has been followed.",
+                });
+            });
         });
     });
 };
@@ -49,14 +59,15 @@ export const deleteRelationships = async (req, res) => {
                 .status(401)
                 .json({ success: false, data: "Token Is Expired" });
 
-        let q = "DELETE FROM likes WHERE `liked_postId`= ? AND `liked_by`=?";
-        const values = [req.query.postId, userInfo.id];
+        let q =
+            "DELETE FROM relationships WHERE `followedUserId`=? AND `followerUserId`=?";
+        const values = [req.query.userId, userInfo.id];
 
         db.query(q, values, (err, data) => {
             if (err) return res.status(500).json({ success: false, data: err });
             return res
                 .status(200)
-                .json({ success: true, data: "Post has been Disliked." });
+                .json({ success: true, data: "User has been followed." });
         });
     });
 };

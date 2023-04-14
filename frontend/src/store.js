@@ -6,14 +6,14 @@ import {
 } from "redux";
 import thunk from "redux-thunk";
 import { postReducer, postsReducer } from "./reducers/postsReducer";
-import { profileReducer, usersReducer } from "./reducers/usersReducer";
+import { profileReducer, userReducer } from "./reducers/usersReducer";
 import { friendsReducer } from "./reducers/friendsReducers";
 import { modeReducer } from "./reducers/modeReducer";
 
 const reducer = combineReducers({
     posts: postsReducer,
     post: postReducer,
-    users: usersReducer,
+    user: userReducer,
     profile: profileReducer,
     friends: friendsReducer,
     mode: modeReducer,

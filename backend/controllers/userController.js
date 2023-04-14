@@ -2,6 +2,16 @@ import jwt from "jsonwebtoken";
 import db from "../db.js";
 import cloudinary from "cloudinary";
 
+export const findUser = (req, res) => {
+    const q = `SELECT userId,firstName,lastName,occupation,location,picturePath FROM users WHERE userId=?`;
+    db.query(q, [req.params.userId], (err, data) => {
+        if (err) return res.status(500).json({ success: false, err });
+        else {
+            return res.status(200).json({ success: true, data: data });
+        }
+    });
+};
+
 export const getUser = (req, res) => {
     const { token } = req.cookies;
     if (!token)

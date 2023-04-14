@@ -1,23 +1,41 @@
-export const usersReducer =
-    () =>
-    (state = { users: [] }, action) => {
-        switch (action.type) {
-            case "ALL_USERS_SUCCESS":
-                return {
-                    loading: false,
-                    users: action.payload,
-                };
+export const userReducer = (state = { user: {} }, action) => {
+    switch (action.type) {
+        case "FIND_USER_REQUEST":
+            return {
+                ...state,
+                loading: true,
+            };
+        case "FIND_USER_SUCCESS":
+            return {
+                ...state,
+                loading: false,
+                user: action.payload,
+            };
 
-            default:
-                return state;
-        }
-    };
+        case "FIND_USER_FAIL":
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+            };
+        case "CLEAR_ERRORS":
+            return {
+                ...state,
+                isUpdated: false,
+                error: null,
+            };
+        default:
+            return state;
+    }
+};
 
 export const profileReducer = (state = { user: {} }, action) => {
     switch (action.type) {
         case "GET_USER_REQUEST":
         case "UPDATE_USER_REQUEST":
         case "NEW_USER_REQUEST":
+        case "FOLLOW_USER_REQUEST":
+        case "UNFOLLOW_USER_REQUEST":
             return {
                 ...state,
                 loading: true,
@@ -30,6 +48,8 @@ export const profileReducer = (state = { user: {} }, action) => {
                 user: action.payload,
             };
         case "UPDATE_USER_SUCCESS":
+        case "FOLLOW_USER_SUCCESS":
+        case "UNFOLLOW_USER_SUCCESS":
             return {
                 ...state,
                 loading: false,

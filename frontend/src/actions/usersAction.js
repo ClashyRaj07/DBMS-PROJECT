@@ -92,9 +92,29 @@ export const updateUser = (formData, userId) => async (dispatch) => {
 
 export const setMode = (newMode) => async (dispatch) => {
     if (newMode === "dark") {
-        dispatch({ type: "DARK_MODE" });
-    } else {
         dispatch({ type: "LIGHT_MODE" });
+    } else {
+        dispatch({ type: "DARK_MODE" });
+    }
+};
+
+export const findUser = (userId) => async (dispatch) => {
+    try {
+        dispatch({ type: "FIND_USER_REQUEST" });
+
+        const options = {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
+        };
+        const { data } = await axios.get(`${baseURL}/users/${userId}`, options);
+
+        dispatch({ type: "FIND_USER_SUCCESS", payload: data.data[0] });
+    } catch (error) {
+        console.log(error.response);
+        dispatch({
+            type: "FIND_USER_FAIL",
+            payload: error.response.data.message,
+        });
     }
 };
 export const clearErrors = () => async (dispatch) => {

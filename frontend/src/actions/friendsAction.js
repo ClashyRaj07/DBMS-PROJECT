@@ -29,15 +29,13 @@ export const unfollowUser = (userId) => async (dispatch) => {
     try {
         dispatch({ type: "UNFOLLOW_USER_REQUEST" });
 
-        const config = {
+        const options = {
             withCredentials: true,
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
         };
         const { data } = await axios.delete(
             `${baseURL}/relationships?followedUserId=${userId}`,
-            { config }
+            options
         );
 
         dispatch({ type: "UNFOLLOW_USER_SUCCESS", payload: data.success });
@@ -53,15 +51,14 @@ export const followUser = (userId) => async (dispatch) => {
     try {
         dispatch({ type: "FOLLOW_USER_REQUEST" });
 
-        const config = {
+        const options = {
             withCredentials: true,
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
         };
         const { data } = await axios.post(
-            `${baseURL}/relationships?followedUserId=${userId}`,
-            { config }
+            `${baseURL}/relationships`,
+            { userId },
+            options
         );
 
         dispatch({ type: "FOLLOW_USER_SUCCESS", payload: data.success });

@@ -2,13 +2,14 @@ import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setFriends } from "state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
 import moment from 'moment'
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import { followUser, unfollowUser } from "../actions/friendsAction";
+import { useEffect, useState } from "react";
+import { setFriends } from "../actions/friendsAction";
 
 
 
@@ -16,21 +17,21 @@ const Friend = ({ friendId, name, createdAt, userPicturePath }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.profile);
+  const { user: cUser } = useSelector(state => state.user)
   const { friendsList: friends } = useSelector((state) => state.friends);
-
+  const [isFriend, setIsFriend] = useState(false)
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
   const primaryDark = palette.primary.dark;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  const isFriend = friends?.includes(friendId);
 
 
 
 
   const patchFriend = async () => {
-    if (isFriend) {
+    if (friends && friends.map(f => f.userId === friendId)) {
       dispatch(unfollowUser(friendId));
 
     }
@@ -39,6 +40,10 @@ const Friend = ({ friendId, name, createdAt, userPicturePath }) => {
       dispatch(followUser(friendId))
     }
   };
+  useEffect(() => {
+
+  })
+
 
   return (
     <FlexBetween>
@@ -72,7 +77,7 @@ const Friend = ({ friendId, name, createdAt, userPicturePath }) => {
           onClick={() => patchFriend()}
           sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
         >
-          {isFriend ? (
+          {friends && friends.map(f => f.userId === friendId) ? (
             <PersonRemoveOutlined sx={{ color: primaryDark }} />
           ) : (
             <PersonAddOutlined sx={{ color: primaryDark }} />

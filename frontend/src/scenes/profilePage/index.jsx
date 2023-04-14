@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -8,25 +8,24 @@ import MyPostWidget from "../widgets/MyPostWidget";
 import PostsWidget from "../widgets/PostsWidget";
 import UserWidget from "../widgets/UserWidget";
 import Loader from '../../components/Loader'
-import { getUser } from "../../actions/usersAction";
+import { findUser, getUser } from "../../actions/usersAction";
 import { setFriends } from "../../actions/friendsAction";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const { userId } = useParams();
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  const { user } = useSelector(state => state.profile)
-
-
-  const navigate = useNavigate();
+  const { user } = useSelector(state => state.user)
+  const { user: loggendUser } = useSelector(state => state.profile)
 
   useEffect(() => {
-    console.log("User id", userId);
-    dispatch(setFriends(userId));
-    if (!user || user === null) {
-      navigate('/');
+
+    if (!user || user.length === 0 || (user && user.userId !== userId)) {
+      // dispatch(findUser(userId))
+      // dispatch(setFriends(userId));
     }
-  }, [dispatch, navigate, user, userId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, userId]);
 
 
 
@@ -45,9 +44,12 @@ const ProfilePage = () => {
             justifyContent="center"
           >
             <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
-              <UserWidget userId={userId} picturePath={user.picturePath} />
+              <UserWidget user={user} />
               <Box m="2rem 0" />
-              <FriendListWidget userId={userId} title={"Friends List"} />
+
+              {loggendUser.userId == user.userId &&
+                <FriendListWidget user={user} title={"Friends List"} />
+              }
             </Box>
             <Box
               height={'85vh'} overflow={'scroll'}
@@ -55,13 +57,18 @@ const ProfilePage = () => {
               flexBasis={isNonMobileScreens ? "42%" : undefined}
               mt={isNonMobileScreens ? undefined : "2rem"}
             >
-              <MyPostWidget picturePath={user.picturePath} />
+
+              <MyPostWidget userId={userId} />
               <Box m="2rem 0" />
-              <PostsWidget userId={userId} isProfile />
+
+              <PostsWidget userId={userId} isProfile={true} />
             </Box>
-            <Box>
-              <FriendListWidget userId={userId} title={"Friends Requests"} />
-            </Box>
+            {loggendUser.userId == user.userId &&
+              <Box>
+                <FriendListWidget userId={userId} title={"Friends Suggestions"} />
+              </Box>
+            }
+
           </Box>
         </Box>
       }

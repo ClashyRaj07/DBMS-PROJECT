@@ -14,136 +14,131 @@ import { useNavigate } from "react-router-dom";
 import UserUpdate from '../../components/UserUpdate'
 import { getUser } from "../../actions/usersAction";
 import { setFriends } from '../../actions/friendsAction'
+import Loader from '../../components/Loader'
 
 const UserWidget = ({ userId }) => {
   const dispatch = useDispatch();
   const { palette } = useTheme();
-  const { user, isUpdated } = useSelector((state => state.profile))
+  const { isUpdated } = useSelector((state => state.profile))
+  const { user, loading } = useSelector(state => state.user)
   const navigate = useNavigate();
   const { friendsList: friends } = useSelector(state => state.friends)
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-
-
   useEffect(() => {
+    console.log("user-->", userId);
     dispatch(getUser(userId));
     dispatch(setFriends(userId))
 
-  }, [dispatch, isUpdated, userId]);
+  }, [dispatch, isUpdated, userId, loading, isUpdated]);
 
 
 
-  const {
-
-    firstName,
-    lastName,
-    location,
-    occupation,
-    viewedProfile,
-    impressions,
-
-  } = user;
 
   return (
-    <WidgetWrapper>
-      {/* FIRST ROW */}
-      <FlexBetween
-        gap="0.5rem"
-        pb="1.1rem"
-        onClick={() => navigate(`/profile/${user.userId}`)}
-      >
-        <FlexBetween gap="1rem">
-          <UserImage image={user.picturePath} />
-          <Box>
-            <Typography
-              variant="h4"
-              color={dark}
-              fontWeight="500"
-              sx={{
-                "&:hover": {
-                  color: palette.primary.light,
-                  cursor: "pointer",
-                },
-              }}
-            >
-              {firstName} {lastName}
-            </Typography>
-            <Typography color={medium}>{friends ? friends.length : ""} friends</Typography>
+    <>
+      {loading ? <Loader /> :
+        <WidgetWrapper>
+          {/* FIRST ROW */}
+          <FlexBetween
+            gap="0.5rem"
+            pb="1.1rem"
+            onClick={() => navigate(`/profile/${user.userId}`)}
+          >
+            <FlexBetween gap="1rem">
+              <UserImage image={user.picturePath} />
+              <Box>
+                <Typography
+                  variant="h4"
+                  color={dark}
+                  fontWeight="500"
+                  sx={{
+                    "&:hover": {
+                      color: palette.primary.light,
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  {user.firstName} {user.lastName}
+                </Typography>
+                <Typography color={medium}>{friends ? friends.length : ""} friends</Typography>
+              </Box>
+            </FlexBetween>
+
+            <UserUpdate />
+          </FlexBetween>
+
+          <Divider />
+
+          {/* SECOND ROW */}
+          <Box p="1rem 0">
+            <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
+              <LocationOnOutlined fontSize="large" sx={{ color: main }} />
+              <Typography color={medium}>{user.location}</Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap="1rem">
+              <WorkOutlineOutlined fontSize="large" sx={{ color: main }} />
+              <Typography color={medium}>{user.occupation}</Typography>
+            </Box>
           </Box>
-        </FlexBetween>
 
-        <UserUpdate />
-      </FlexBetween>
+          <Divider />
 
-      <Divider />
-
-      {/* SECOND ROW */}
-      <Box p="1rem 0">
-        <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-          <LocationOnOutlined fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>{location}</Typography>
-        </Box>
-        <Box display="flex" alignItems="center" gap="1rem">
-          <WorkOutlineOutlined fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>{occupation}</Typography>
-        </Box>
-      </Box>
-
-      <Divider />
-
-      {/* THIRD ROW */}
-      <Box p="1rem 0">
-        <FlexBetween mb="0.5rem">
-          <Typography color={medium}>Who's viewed your profile</Typography>
-          <Typography color={main} fontWeight="500">
-            {viewedProfile}
-          </Typography>
-        </FlexBetween>
-        <FlexBetween>
-          <Typography color={medium}>Impressions of your post</Typography>
-          <Typography color={main} fontWeight="500">
-            {impressions}
-          </Typography>
-        </FlexBetween>
-      </Box>
-
-      <Divider />
-
-      {/* FOURTH ROW */}
-      <Box p="1rem 0">
-        <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
-          Social Profiles
-        </Typography>
-
-        <FlexBetween gap="1rem" mb="0.5rem">
-          <FlexBetween gap="1rem">
-            <img src="../assets/twitter.png" alt="twitter" />
-            <Box>
+          {/* THIRD ROW */}
+          <Box p="1rem 0">
+            <FlexBetween mb="0.5rem">
+              <Typography color={medium}>Who's viewed your profile</Typography>
               <Typography color={main} fontWeight="500">
-                Twitter
+                {user.viewedProfile}
               </Typography>
-              <Typography color={medium}>Social Network</Typography>
-            </Box>
-          </FlexBetween>
-          <EditOutlined sx={{ color: main }} />
-        </FlexBetween>
-
-        <FlexBetween gap="1rem">
-          <FlexBetween gap="1rem">
-            <img src="../assets/linkedin.png" alt="linkedin" />
-            <Box>
+            </FlexBetween>
+            <FlexBetween>
+              <Typography color={medium}>Impressions of your post</Typography>
               <Typography color={main} fontWeight="500">
-                Linkedin
+                {user.impressions}
               </Typography>
-              <Typography color={medium}>Network Platform</Typography>
-            </Box>
-          </FlexBetween>
-          <EditOutlined sx={{ color: main }} />
-        </FlexBetween>
-      </Box>
-    </WidgetWrapper>
+            </FlexBetween>
+          </Box>
+
+          <Divider />
+
+          {/* FOURTH ROW */}
+          <Box p="1rem 0">
+            <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
+              Social Profiles
+            </Typography>
+
+            <FlexBetween gap="1rem" mb="0.5rem">
+              <FlexBetween gap="1rem">
+                <img src="../assets/twitter.png" alt="twitter" />
+                <Box>
+                  <Typography color={main} fontWeight="500">
+                    Twitter
+                  </Typography>
+                  <Typography color={medium}>Social Network</Typography>
+                </Box>
+              </FlexBetween>
+              <EditOutlined sx={{ color: main }} />
+            </FlexBetween>
+
+            <FlexBetween gap="1rem">
+              <FlexBetween gap="1rem">
+                <img src="../assets/linkedin.png" alt="linkedin" />
+                <Box>
+                  <Typography color={main} fontWeight="500">
+                    Linkedin
+                  </Typography>
+                  <Typography color={medium}>Network Platform</Typography>
+                </Box>
+              </FlexBetween>
+              <EditOutlined sx={{ color: main }} />
+            </FlexBetween>
+          </Box>
+        </WidgetWrapper>
+      }
+    </>
   );
 };
 

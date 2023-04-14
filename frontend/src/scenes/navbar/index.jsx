@@ -22,7 +22,7 @@ import {
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 import { logout, setMode } from "../../actions/usersAction";
 
@@ -79,7 +79,7 @@ const Navbar = () => {
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
           <IconButton onClick={() => dispatch(setMode(mode))}>
-            {theme.palette.mode === "dark" ? (
+            {theme.palette.mode !== "dark" ? (
               <DarkMode sx={{ fontSize: "25px" }} />
             ) : (
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
@@ -93,7 +93,7 @@ const Navbar = () => {
               value={fullName}
               sx={{
                 backgroundColor: neutralLight,
-                width: "150px",
+                width: "180px",
                 borderRadius: "0.25rem",
                 p: "0.25rem 1rem",
                 "& .MuiSvgIcon-root": {
@@ -107,7 +107,7 @@ const Navbar = () => {
               input={<InputBase />}
             >
               <MenuItem value={fullName}>
-                <Typography>{fullName}</Typography>
+                <Link to={`/profile/${user.userId}`}><Typography>{fullName}</Typography></Link>
               </MenuItem>
               <MenuItem onClick={() => dispatch(logout())}>Log Out</MenuItem>
             </Select>
@@ -181,7 +181,7 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem value={fullName}>
+                <MenuItem value={fullName} style={{ width: "180px" }}>
                   <Typography>{fullName}</Typography>
                 </MenuItem>
                 <MenuItem onClick={() => dispatch(logout())}>

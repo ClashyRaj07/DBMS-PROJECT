@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { setFriends } from "../../actions/friendsAction";
 
-const FriendListWidget = ({ userId, title }) => {
+const FriendListWidget = ({ user, title }) => {
   const dispatch = useDispatch();
   const { friendsList: friends } = useSelector(state => state.friends)
   const { palette } = useTheme();
@@ -16,10 +16,10 @@ const FriendListWidget = ({ userId, title }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation(
     (liked) => {
-      if (!liked) return axios.post(`http://localhost:5000/likes`, {}, { withCredentials: true })
+      if (!liked) return axios.post(`http://localhost:5000/likes`, { userId: user.userId }, { withCredentials: true })
 
 
-      return axios.delete(`http://localhost:5000/likes?userId=${userId}`, { withCredentials: true })
+      return axios.delete(`http://localhost:5000/likes?userId=${user.userId}`, { withCredentials: true })
     },
     {
       onSuccess: () => {
@@ -33,8 +33,8 @@ const FriendListWidget = ({ userId, title }) => {
 
 
   useEffect(() => {
-    dispatch(setFriends(userId))
-  }, [dispatch, userId]);
+    dispatch(setFriends(user?.userId))
+  }, [dispatch, user?.userId]);
   return (
     <WidgetWrapper>
       <Typography
@@ -49,7 +49,7 @@ const FriendListWidget = ({ userId, title }) => {
         {friends.length > 0 && friends.map((friend, i) => (
           <Friend
             key={i}
-            friendId={friend._id}
+            friendId={friend.userId}
             name={`${friend.firstName} ${friend.lastName}`}
             subtitle={friend.occupation}
             userPicturePath={friend.picturePath}

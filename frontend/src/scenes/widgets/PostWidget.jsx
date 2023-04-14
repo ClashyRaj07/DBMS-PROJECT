@@ -37,6 +37,7 @@ const PostWidget = ({
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
+
   const { isLoading, error, data } = useQuery('likes', () => axios.get(`http://localhost:5000/likes?postId=${postId}`, { withCredentials: true }).then(res => {
     setlikes([]);
     setlikes([...new Set(res.data.data)])

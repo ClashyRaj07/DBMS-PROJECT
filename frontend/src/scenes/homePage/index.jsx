@@ -9,6 +9,9 @@ import FriendListWidget from '../widgets/FriendListWidget'
 import { useEffect } from 'react'
 import Loader from '../../components/Loader'
 import { setFriends } from '../../actions/friendsAction'
+import { getUser } from '../../actions/usersAction'
+import { useQuery } from 'react-query'
+import axios from 'axios'
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -16,9 +19,15 @@ const HomePage = () => {
   const _id = useSelector(state => state.profile.user.userId);
   const { user, isUpdated } = useSelector(state => state.profile)
 
+  const { isLoading, error, data } = useQuery('friends', () => axios.get(`http://localhost:5000/relationships?followerUserId=${_id}`, { withCredentials: true }).then(res => {
+    dispatch({ type: 'SET_FRIENDS_SUCCESS', data: data.data })
+  }));
 
   useEffect(
     () => {
+      if (user.userId !== _id)
+        dispatch(getUser(_id))
+
       dispatch(setFriends(_id))
 
     }, [user, isUpdated, dispatch, _id]
