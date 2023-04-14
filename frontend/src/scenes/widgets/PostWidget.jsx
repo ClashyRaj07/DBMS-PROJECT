@@ -27,24 +27,13 @@ const PostWidget = ({
   comments,
 }) => {
   const [isComments, setIsComments] = useState(false);
-  const dispatch = useDispatch();
-  const loggedInUserId = useSelector((state) => state.profile.user?.userId);
-
-  const [isLiked, setIsLiked] = useState(false)
-  const [likes, setlikes] = useState([])
-
+  const loggedInUserId = useSelector((state) => state.profile.user.userId);
+  const [likes, setLikes] = useState([])
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
-
-  const { isLoading, error, data } = useQuery('likes', () => axios.get(`http://localhost:5000/likes?postId=${postId}`, { withCredentials: true }).then(res => {
-    setlikes([]);
-    setlikes([...new Set(res.data.data)])
-    setIsLiked(likes.includes(loggedInUserId) ? true : false)
-  }));
-
-
+  const { isLoading, error, data } = useQuery('likes', () => axios.get(`http://localhost:5000/likes?postId=${postId}`, { withCredentials: true }).then(res => res.data.data).then(res => setLikes(res)));
   const queryClient = useQueryClient();
   const mutation = useMutation(
     (liked) => {
@@ -61,13 +50,13 @@ const PostWidget = ({
   )
 
   const handleClick = () => {
-    mutation.mutate(isLiked)
+    mutation.mutate(likes?.includes(loggedInUserId))
 
   }
-
   useEffect(() => {
 
-  }, [likes, isLoading])
+  }, [postId, isLoading])
+
   return (
     <WidgetWrapper m="2rem 0">
       <Friend
@@ -95,13 +84,13 @@ const PostWidget = ({
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
             <IconButton onClick={handleClick}>
-              {likes && likes.includes(loggedInUserId) ? (
+              {isLoading ? "Loading" : likes.includes(loggedInUserId) ? (
                 <FavoriteOutlined sx={{ color: primary }} />
               ) : (
                 <FavoriteBorderOutlined />
               )}
             </IconButton>
-            <Typography>{likes.length}</Typography>
+            <Typography>{isLoading ? "Loading" : likes.length}</Typography>
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">

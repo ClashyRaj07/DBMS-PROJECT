@@ -1,8 +1,7 @@
 use twiktik;
 
--- Want to Drop TAblse
--- drop table users;
- show tables;
+show tables;
+ 
 -- Creating Users Table-- 
 CREATE TABLE `users` (
   `userId` int NOT NULL AUTO_INCREMENT,
@@ -51,7 +50,6 @@ CREATE TABLE `comments` (
 
 
 -- Creating Likes Table-- 
-
 CREATE TABLE `likes` (
   `liked_by` int NOT NULL,
   `liked_postId` int NOT NULL,
@@ -63,7 +61,6 @@ CREATE TABLE `likes` (
 
 
 -- Creating Relatongships Table--
-
 CREATE TABLE `relationships` (
   `id` int NOT NULL AUTO_INCREMENT,
   `followerUserId` int DEFAULT NULL,

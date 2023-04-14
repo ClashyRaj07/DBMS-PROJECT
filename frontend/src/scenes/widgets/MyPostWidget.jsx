@@ -26,7 +26,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import { getAllPosts, newPost } from "../../actions/postActions";
 import Loader from '../../components/Loader'
-
+import { useMutation, useQueryClient } from "react-query";
+import axios from "axios";
+import { baseURL } from "../../Axios";
+const options = {
+  withCredentials: true,
+  headers: { "Content-Type": "application/json" },
+};
 const MyPostWidget = () => {
 
   const dispatch = useDispatch();
@@ -37,13 +43,24 @@ const MyPostWidget = () => {
   const { user } = useSelector((state) => state.profile);
 
   const userId = user?.userId;
-  const { isCreated, error, user: profile } = useSelector(state => state.post)
 
   // const friends = useSelector((state) => state.user.friends);
   const imageRef = useRef();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    (newPost) => {
+      return axios.post(`${baseURL}/posts/create`, newPost, options)
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['[posts]'])
+      }
+    }
+  )
 
   const handleImageChange = (e) => {
     const reader = new FileReader();
@@ -64,30 +81,16 @@ const MyPostWidget = () => {
     }
     if (image) myForm.image = image
 
-    dispatch(newPost(myForm));
+    mutation.mutate(myForm)
     imageRef.current.value = null;
     setImage(null);
     setPost("");
   };
 
-  useEffect(
-    () => {
-      if (isCreated) {
-        dispatch(getAllPosts());
-      }
-      if (error) {
-        alert(error);
-        dispatch({ type: "CLEAR_ERRORS" })
-      }
-
-    }
-    ,
-    [isCreated, error, dispatch]
-  )
   return (
     <>
 
-      {profile ? <Loader /> :
+      {
         <WidgetWrapper>
           <FlexBetween gap="1.5rem">
             <UserImage image={user.picturePath} />

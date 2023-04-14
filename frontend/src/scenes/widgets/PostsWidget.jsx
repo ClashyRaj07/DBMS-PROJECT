@@ -3,31 +3,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
 import { getAllPosts, getUserPosts } from "../../actions/postActions";
+import { baseURL } from '../../Axios'
 import axios from "axios";
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
-  const { posts } = useSelector(state => state.posts)
+  // const { posts } = useSelector(state => state.posts)
   const { isLiked } = useSelector(state => state.post)
   const [updatedPost, setUpdatedPost] = useState([])
-  const getPosts = async () => {
-    dispatch(getAllPosts(userId));
+
+  const options = {
+    withCredentials: true,
+    headers: { "Content-Type": "application/json" },
   };
 
 
-
-  useEffect(() => {
-    if (isProfile) {
-      dispatch(getUserPosts(userId));
-    }
-    else {
-      getPosts();
-
-    }
-    if (isLiked) {
-      dispatch({ type: 'CLEAR_ERRORS' })
-    }
-  }, [isLiked]); // eslint-disable-line react-hooks/exhaustive-deps
+  const { isLoading: postsLoading, error, data: posts } = useQuery('[posts]', () =>
+    axios.get(`${baseURL}/posts`, options).then(res => res.data.data
+    ));
 
   return (
     <>
@@ -44,8 +38,8 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             location,
             post_img,
             picturePath: userPicturePath,
-            likes = [1, 3, 5],
-            comments = [],
+            likes,
+            comments,
           }) => (
             <PostWidget
               key={_id}
