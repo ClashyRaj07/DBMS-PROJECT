@@ -9,7 +9,7 @@ import FriendListWidget from '../widgets/FriendListWidget'
 import { useEffect } from 'react'
 import Loader from '../../components/Loader'
 import { setFriends } from '../../actions/friendsAction'
-import { getUser } from '../../actions/usersAction'
+import { findUser, getUser } from '../../actions/usersAction'
 import { useQuery } from 'react-query'
 import axios from 'axios'
 
@@ -18,17 +18,18 @@ const HomePage = () => {
   const isNonMobileScreens = useMediaQuery('(min-width:1000px)')
   const _id = useSelector(state => state.profile.user.userId);
   const { user, isUpdated } = useSelector(state => state.profile)
+  const { user: cUser } = useSelector(state => state.user)
 
-  const { isLoading, error, data } = useQuery('friends', () => axios.get(`http://localhost:5000/relationships?followerUserId=${_id}`, { withCredentials: true }).then(res => {
-    dispatch({ type: 'SET_FRIENDS_SUCCESS', data: data.data })
-  }));
+  // const { isLoading, error, data } = useQuery('friends', () => axios.get(`http://localhost:5000/relationships?followedUserId=${_id}`, { withCredentials: true }).then(res => {
+  //   dispatch({ type: 'SET_FRIENDS_SUCCESS', data: res.data.data })
+  // }));
 
   useEffect(
     () => {
-      if (user.userId !== _id)
-        dispatch(getUser(_id))
+      if (!cUser || cUser.userId !== _id)
+        dispatch(findUser(user.userId))
 
-      dispatch(setFriends(_id))
+      dispatch(setFriends(user.userId))
 
     }, [user, isUpdated, dispatch, _id]
   )

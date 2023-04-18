@@ -67,7 +67,7 @@ export const deleteRelationships = async (req, res) => {
             if (err) return res.status(500).json({ success: false, data: err });
             return res
                 .status(200)
-                .json({ success: true, data: "User has been followed." });
+                .json({ success: true, data: "User has been unfollowed." });
         });
     });
 };

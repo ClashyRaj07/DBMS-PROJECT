@@ -107,9 +107,25 @@ export const updatePost = (req, res) => {
 // Delete post by postId
 
 export const deletePost = (req, res) => {
-    const postId = req.params.postId;
+    const token = req.cookies.token;
+    if (!token)
+        return res
+            .status(401)
+            .json({ success: false, data: "Please Log in to use more..." });
+    jwt.verify(token, "secretKey", (err, userInfo) => {
+        if (err)
+            return res
+                .status(401)
+                .json({ success: false, data: "Token Is Expired" });
 
-    const q = `DELETE FROM posts WHERE postId='${postId}'`;
-
-    makeQuery(q, res);
+        const q = `DELETE FROM posts WHERE postId=?`;
+        db.query(q, [req.query.postId], (err, data) => {
+            if (err) {
+                res.status(500).json({ success: false, msg: err });
+            }
+            return res
+                .status(200)
+                .json({ success: true, msg: "Post Deleted ." });
+        });
+    });
 };

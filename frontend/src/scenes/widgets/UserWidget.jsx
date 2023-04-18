@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserUpdate from '../../components/UserUpdate'
-import { getUser } from "../../actions/usersAction";
+import { findUser, getUser } from "../../actions/usersAction";
 import { setFriends } from '../../actions/friendsAction'
 import Loader from '../../components/Loader'
 
@@ -28,7 +28,7 @@ const UserWidget = ({ userId }) => {
   const main = palette.neutral.main;
 
   useEffect(() => {
-    console.log("user-->", userId);
+
     dispatch(getUser(userId));
     dispatch(setFriends(userId))
 

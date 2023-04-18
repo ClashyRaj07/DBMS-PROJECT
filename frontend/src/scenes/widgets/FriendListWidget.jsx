@@ -33,7 +33,6 @@ const FriendListWidget = ({ user, title }) => {
 
 
   useEffect(() => {
-    dispatch(setFriends(user?.userId))
   }, [dispatch, user?.userId]);
   return (
     <WidgetWrapper>

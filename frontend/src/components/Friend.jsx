@@ -9,11 +9,14 @@ import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import { followUser, unfollowUser } from "../actions/friendsAction";
 import { useEffect, useState } from "react";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { setFriends } from "../actions/friendsAction";
+import MoreOptions from "./MoreOptions";
 
 
 
-const Friend = ({ friendId, name, createdAt, userPicturePath }) => {
+
+const Friend = ({ friendId, name, createdAt, userPicturePath, postId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.profile);
@@ -40,13 +43,12 @@ const Friend = ({ friendId, name, createdAt, userPicturePath }) => {
       dispatch(followUser(friendId))
     }
   };
-  useEffect(() => {
 
-  })
 
 
   return (
     <FlexBetween>
+
       <FlexBetween gap="1rem">
         <UserImage image={userPicturePath} size="55px" />
         <Box
@@ -72,7 +74,7 @@ const Friend = ({ friendId, name, createdAt, userPicturePath }) => {
             {moment(createdAt).fromNow()}
           </Typography>
         </Box>
-      </FlexBetween>{friendId !== user.userId &&
+      </FlexBetween>{friendId !== user.userId ?
         <IconButton
           onClick={() => patchFriend()}
           sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
@@ -82,8 +84,18 @@ const Friend = ({ friendId, name, createdAt, userPicturePath }) => {
           ) : (
             <PersonAddOutlined sx={{ color: primaryDark }} />
           )}
-        </IconButton>}
+        </IconButton>
+        :
+        <>
+
+          <MoreOptions postId={postId} />
+
+        </>
+
+      }
+
     </FlexBetween>
+
   );
 };
 

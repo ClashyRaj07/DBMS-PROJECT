@@ -9,19 +9,18 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
-  // const { posts } = useSelector(state => state.posts)
+  const [posts, setPosts] = useState([])
   const { isLiked } = useSelector(state => state.post)
-  const [updatedPost, setUpdatedPost] = useState([])
 
   const options = {
     withCredentials: true,
     headers: { "Content-Type": "application/json" },
   };
 
-
-  const { isLoading: postsLoading, error, data: posts } = useQuery('[posts]', () =>
-    axios.get(`${baseURL}/posts`, options).then(res => res.data.data
-    ));
+  const Url = `${baseURL}/posts/${isProfile ? userId : ""}`
+  const { isLoading: postsLoading, error, data } = useQuery('[posts]', () =>
+    axios.get(Url, options).then(res => res.data.data
+    ).then(res => setPosts(res)));
 
   return (
     <>

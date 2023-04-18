@@ -20,10 +20,14 @@ const ProfilePage = () => {
 
   useEffect(() => {
 
-    if (!user || user.length === 0 || (user && user.userId !== userId)) {
-      // dispatch(findUser(userId))
-      // dispatch(setFriends(userId));
+
+    if (userId !== user.userId) {
+      dispatch(findUser(userId))
+
     }
+    dispatch(setFriends(userId));
+
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
 
