@@ -1,5 +1,4 @@
-import axios from "axios";
-import { baseURL } from "../Axios";
+import Axios from "../Axios";
 
 export const getAllPosts = (userId) => async (dispatch) => {
     try {
@@ -9,7 +8,7 @@ export const getAllPosts = (userId) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.get(`${baseURL}/posts`, options);
+        const { data } = await Axios.get(`/posts`, options);
 
         dispatch({ type: "GET_ALL_POSTS_SUCCESS", payload: data.data });
     } catch (error) {
@@ -29,7 +28,7 @@ export const getUserPosts = (userId) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.get(`${baseURL}/posts/${userId}`, options);
+        const { data } = await Axios.get(`/posts/${userId}`, options);
 
         dispatch({ type: "GET_ALL_POSTS_SUCCESS", payload: data.data });
     } catch (error) {
@@ -49,11 +48,7 @@ export const newPost = (postData) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.post(
-            `${baseURL}/posts/create`,
-            postData,
-            options
-        );
+        const { data } = await Axios.post(`/posts/create`, postData, options);
 
         dispatch({ type: "NEW_POSTS_SUCCESS", payload: data.success });
     } catch (error) {
@@ -72,8 +67,8 @@ export const likePost = (liked_by, liked_postId) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.post(
-            `${baseURL}/likes/like`,
+        const { data } = await Axios.post(
+            `/likes/like`,
             { liked_by, liked_postId },
             options
         );

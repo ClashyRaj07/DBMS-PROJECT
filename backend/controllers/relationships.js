@@ -60,8 +60,8 @@ export const deleteRelationships = async (req, res) => {
                 .json({ success: false, data: "Token Is Expired" });
 
         let q =
-            "DELETE FROM relationships WHERE `followedUserId`=? AND `followerUserId`=?";
-        const values = [req.query.userId, userInfo.id];
+            "DELETE FROM relationships WHERE followedUserId=? AND followerUserId=?";
+        const values = [req.query.followedUserId, userInfo.id];
 
         db.query(q, values, (err, data) => {
             if (err) return res.status(500).json({ success: false, data: err });

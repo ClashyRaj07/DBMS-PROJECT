@@ -19,7 +19,7 @@ import MoreOptions from "./MoreOptions";
 const Friend = ({ friendId, name, createdAt, userPicturePath, postId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.profile);
+  const { user, loading, isUpdated } = useSelector((state) => state.profile);
   const { user: cUser } = useSelector(state => state.user)
   const { friendsList: friends } = useSelector((state) => state.friends);
   const [isFriend, setIsFriend] = useState(false)
@@ -36,14 +36,19 @@ const Friend = ({ friendId, name, createdAt, userPicturePath, postId }) => {
   const patchFriend = async () => {
     if (friends && friends.map(f => f.userId === friendId)) {
       dispatch(unfollowUser(friendId));
-
     }
     else {
-
       dispatch(followUser(friendId))
     }
   };
+  useEffect(() => {
+    if (isUpdated) {
+      dispatch(setFriends(cUser.userId))
 
+    }
+
+
+  }, [loading])
 
 
   return (

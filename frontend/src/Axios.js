@@ -1,3 +1,8 @@
 // export const baseURL = 'https://twiktik.onrender.com'
 
-export const baseURL = "http://localhost:5000";
+import axios from "axios";
+const Axios = axios.create({
+    baseURL: "https://twiktik.onrender.com",
+    withCredentials: true,
+});
+export default Axios;

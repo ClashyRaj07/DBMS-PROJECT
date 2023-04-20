@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
 import { getAllPosts, getUserPosts } from "../../actions/postActions";
-import { baseURL } from '../../Axios'
+import Axios, { baseURL } from '../../Axios'
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
@@ -17,9 +17,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     headers: { "Content-Type": "application/json" },
   };
 
-  const Url = `${baseURL}/posts/${isProfile ? userId : ""}`
+  const Url = `/posts/${isProfile ? userId : ""}`
   const { isLoading: postsLoading, error, data } = useQuery('[posts]', () =>
-    axios.get(Url, options).then(res => res.data.data
+    Axios.get(Url, options).then(res => res.data.data
     ).then(res => setPosts(res)));
 
   return (

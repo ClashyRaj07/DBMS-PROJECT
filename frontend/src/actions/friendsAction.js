@@ -1,5 +1,4 @@
-import axios from "axios";
-import { baseURL } from "../Axios";
+import Axios from "../Axios";
 
 export const setFriends = (userId) => async (dispatch) => {
     try {
@@ -11,8 +10,8 @@ export const setFriends = (userId) => async (dispatch) => {
                 "Content-Type": "application/json",
             },
         };
-        const { data } = await axios.get(
-            `${baseURL}/relationships?followedUserId=${userId}`,
+        const { data } = await Axios.get(
+            `/relationships?followedUserId=${userId}`,
             { config }
         );
 
@@ -33,8 +32,8 @@ export const unfollowUser = (userId) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.delete(
-            `${baseURL}/relationships?followedUserId=${userId}`,
+        const { data } = await Axios.delete(
+            `/relationships?followedUserId=${userId}`,
             options
         );
 
@@ -55,8 +54,8 @@ export const followUser = (userId) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.post(
-            `${baseURL}/relationships`,
+        const { data } = await Axios.post(
+            `/relationships`,
             { userId },
             options
         );

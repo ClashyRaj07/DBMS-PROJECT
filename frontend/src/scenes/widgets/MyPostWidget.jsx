@@ -28,7 +28,7 @@ import { getAllPosts, newPost } from "../../actions/postActions";
 import Loader from '../../components/Loader'
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
-import { baseURL } from "../../Axios";
+import Axios, { baseURL } from "../../Axios";
 const options = {
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
@@ -53,7 +53,7 @@ const MyPostWidget = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation(
     (newPost) => {
-      return axios.post(`${baseURL}/posts/create`, newPost, options)
+      return Axios.post(`/posts/create`, newPost, options)
     },
     {
       onSuccess: () => {

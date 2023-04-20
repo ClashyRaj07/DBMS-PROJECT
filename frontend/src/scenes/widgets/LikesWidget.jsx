@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useSelector } from 'react-redux'
 import { useFetcher } from 'react-router-dom'
+import Axios from '../../Axios'
 
 const LikesWidget = ({ postId }) => {
     const { palette } = useTheme()
@@ -31,7 +32,7 @@ const LikesWidget = ({ postId }) => {
 
     }
 
-    useEffect(() => { axios.get(`http://localhost:5000/likes?postId=${postId}`).then(res => res.data.data).then(data => setLikes(data)) }, [isLoading])
+    useEffect(() => { Axios.get(`/likes?postId=${postId}`).then(res => res.data.data).then(data => setLikes(data)) }, [isLoading, postId])
 
 
     return (<>

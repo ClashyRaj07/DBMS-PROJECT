@@ -107,7 +107,7 @@ const Navbar = () => {
               input={<InputBase />}
             >
               <MenuItem value={fullName}>
-                <Typography color={neutralLight}><Link to={`/profile/${user.userId}`}>{fullName}</Link></Typography>
+                <Link to={`/profile/${user.userId}`}><Typography color="primary">{fullName}</Typography></Link>
               </MenuItem>
               <MenuItem onClick={() => dispatch(logout())}>Log Out</MenuItem>
             </Select>

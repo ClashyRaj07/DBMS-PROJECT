@@ -1,5 +1,6 @@
 import axios from "axios";
-import { baseURL } from "../Axios";
+import Axios from "../Axios";
+
 export const registerUser = (userData) => async (dispatch) => {
     console.log("register is here ");
     try {
@@ -9,11 +10,7 @@ export const registerUser = (userData) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.post(
-            `${baseURL}/auth/register`,
-            userData,
-            options
-        );
+        const { data } = await Axios.post(`/auth/register`, userData, options);
 
         dispatch({ type: "NEW_USER_SUCCESS", payload: data.success });
     } catch (error) {
@@ -32,11 +29,7 @@ export const loginUser = (userData) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.post(
-            `${baseURL}/auth/login`,
-            userData,
-            options
-        );
+        const { data } = await Axios.post(`/auth/login`, userData, options);
 
         dispatch({ type: "GET_USER_SUCCESS", payload: data.user });
     } catch (error) {
@@ -59,7 +52,7 @@ export const getUser = (userId) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.get(`${baseURL}/users`, options);
+        const { data } = await Axios.get(`/users`, options);
 
         dispatch({ type: "GET_USER_SUCCESS", payload: data.data[0] });
     } catch (error) {
@@ -79,7 +72,7 @@ export const updateUser = (formData, userId) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.put(`${baseURL}/users`, formData, options);
+        const { data } = await Axios.put(`/users`, formData, options);
 
         dispatch({ type: "UPDATE_USER_SUCCESS", payload: data.success });
     } catch (error) {
@@ -106,7 +99,7 @@ export const findUser = (userId) => async (dispatch) => {
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         };
-        const { data } = await axios.get(`${baseURL}/users/${userId}`, options);
+        const { data } = await Axios.get(`/users/${userId}`, options);
 
         dispatch({ type: "FIND_USER_SUCCESS", payload: data.data[0] });
     } catch (error) {

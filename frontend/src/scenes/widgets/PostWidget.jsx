@@ -38,8 +38,8 @@ const PostWidget = ({ postId, postUserId, name, description, createdAt, pictureP
           <FlexBetween gap='0.3rem'>
             <LikesWidget postId={postId} />
           </FlexBetween>
-          <FlexBetween gap='0.3rem'>
-            <IconButton onClick={() => setIsComments(!isComments)}>
+          <FlexBetween gap='0.3rem' onClick={() => setIsComments(!isComments)}>
+            <IconButton >
               <ChatBubbleOutlineOutlined />
             </IconButton>
             <Typography>
