@@ -10,6 +10,7 @@ import UserImage from '../../components/UserImage'
 import FlexBetween from '../../components/FlexBetween'
 import { useSelector } from 'react-redux'
 import SendIcon from '@mui/icons-material/Send';
+import Axios from '../../Axios'
 
 const CommentWidget = ({ postId }) => {
     const navigate = useNavigate();
@@ -22,12 +23,12 @@ const CommentWidget = ({ postId }) => {
     const main = palette.neutral.main
     const primary = palette.primary.main
 
-    const { isLoading, error, data } = useQuery('comments', () => axios.get(`http://localhost:5000/comments?postId=${postId}`, { withCredentials: true })
+    const { isLoading, error, data } = useQuery('comments', () => Axios.get(`/comments?postId=${postId}`, { withCredentials: true })
     )
     const queryClient = useQueryClient();
     const mutation = useMutation(
         (newComment) => {
-            return axios.post('http://localhost:5000/comments/add', newComment, { withCredentials: true })
+            return Axios.post('/comments/add', newComment, { withCredentials: true })
         },
         {
             onSuccess: () => {

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { setFriends } from "../../actions/friendsAction";
+import Axios from "../../Axios";
 
 const FriendListWidget = ({ user, title }) => {
   const dispatch = useDispatch();
@@ -16,10 +17,10 @@ const FriendListWidget = ({ user, title }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation(
     (liked) => {
-      if (!liked) return axios.post(`http://localhost:5000/likes`, { userId: user.userId }, { withCredentials: true })
+      if (!liked) return Axios.post(`/likes`, { userId: user.userId }, { withCredentials: true })
 
 
-      return axios.delete(`http://localhost:5000/likes?userId=${user.userId}`, { withCredentials: true })
+      return Axios.delete(`/likes?userId=${user.userId}`, { withCredentials: true })
     },
     {
       onSuccess: () => {

@@ -19,10 +19,10 @@ const LikesWidget = ({ postId }) => {
     const mutation = useMutation(
         (liked) => {
 
-            if (!liked) return axios.post(`http://localhost:5000/likes`, { postId: postId }, { withCredentials: true }).then(setIsLoading(false))
+            if (!liked) return Axios.post(`likes`, { postId: postId }, { withCredentials: true }).then(setIsLoading(false))
 
 
-            return axios.delete(`http://localhost:5000/likes?postId=${postId}`, { withCredentials: true }).then(setIsLoading(false))
+            return Axios.delete(`/likes?postId=${postId}`, { withCredentials: true }).then(setIsLoading(false))
         }
     )
     const handleClick = async (e) => {

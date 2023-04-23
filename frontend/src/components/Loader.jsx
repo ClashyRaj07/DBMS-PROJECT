@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 import { Box } from '@mui/material';
 
+
 export default function LinearColor() {
     return (
         <Box>
@@ -10,7 +11,7 @@ export default function LinearColor() {
                 <LinearProgress color="secondary" />
             </Stack>
             <div style={{ backgroundColor: 'white', width: '100%', height: '100vh', display: 'flex' }}>
-                <img src="./twikle.gif" alt="TwikTik" width={'20%'} style={{ margin: 'auto' }} />
+                <img src={'./assets/twikle.gif'} alt="TwikTik" width={'20%'} style={{ margin: 'auto' }} />
             </div>
         </Box>
 
